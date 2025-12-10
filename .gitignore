@@ -1,0 +1,97 @@
+# --------------------------------------------
+# Java
+# --------------------------------------------
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.class
+*.log
+*.tmp
+*.out
+
+# Evitar archivos de empaquetado
+*.zip
+*.tar.gz
+*.rar
+
+# --------------------------------------------
+# Maven
+# --------------------------------------------
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+mvnw
+mvnw.cmd
+
+# --------------------------------------------
+# Spring Boot
+# --------------------------------------------
+spring.log
+*.pid
+*.bak
+
+# --------------------------------------------
+# IntelliJ IDEA
+# --------------------------------------------
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Cache de IntelliJ
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/shelf/
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# --------------------------------------------
+# Compilación y archivos temporales
+# --------------------------------------------
+bin/
+build/
+out/
+dist/
+
+# --------------------------------------------
+# Sistema operativo - Windows
+# --------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --------------------------------------------
+# Sistema operativo - Linux / Mac
+# --------------------------------------------
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# --------------------------------------------
+# Logs
+# --------------------------------------------
+*.log
+logs/
+log/
+*.error
+*.trace
+
+# --------------------------------------------
+# Archivos de entorno / credenciales
+# --------------------------------------------
+*.env
+.env.*
+application-local.yml
+application-local.properties
+secret/
+keys/
