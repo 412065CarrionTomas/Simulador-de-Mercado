@@ -1,4 +1,4 @@
-package ar.com.carrion.simuladordemercado.backend.RandomAlgorithm;
+package ar.com.carrion.simuladordemercado.backend.Features.Algorithms.RandomAlgorithm;
 
 import org.springframework.stereotype.Service;
 
