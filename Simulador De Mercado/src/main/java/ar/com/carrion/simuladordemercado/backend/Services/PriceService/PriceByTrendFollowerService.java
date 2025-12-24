@@ -1,16 +1,16 @@
-package ar.com.carrion.simuladordemercado.backend.Features.Algorithms.TrendFollowersAlgorithm;
+package ar.com.carrion.simuladordemercado.backend.Services.PriceService;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Price;
-import ar.com.carrion.simuladordemercado.backend.Features.Singleton.PriceSingleton;
-import org.springframework.stereotype.Service;
+import ar.com.carrion.simuladordemercado.backend.Algorithm.TrendFollowersAlgorithm;
 
-@Service
+
 public class PriceByTrendFollowerService {
-    private final TrendFollowersAlgorithmService _TrendFollowersAlgorithm;
-    Price price = PriceSingleton.getInstance();
+    private final TrendFollowersAlgorithm _TrendFollowersAlgorithm;
+    private final Price price;
 
-    public PriceByTrendFollowerService(TrendFollowersAlgorithmService trendFollowersAlgorithm) {
+    public PriceByTrendFollowerService(TrendFollowersAlgorithm trendFollowersAlgorithm, Price price) {
         _TrendFollowersAlgorithm = trendFollowersAlgorithm;
+        this.price = price;
     }
 
     public Price modifyPriceByTrendFollower(){

@@ -1,4 +1,4 @@
-package ar.com.carrion.simuladordemercado.backend.Persistence;
+package ar.com.carrion.simuladordemercado.backend.Infrastructure.Candle;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import jakarta.transaction.Transactional;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ICandleRepository extends JpaRepository<Candle, Long> {
+public interface ICandleDataRepository extends JpaRepository<Candle, Long> {
 
     @Transactional
     @Modifying
@@ -24,8 +24,11 @@ public interface ICandleRepository extends JpaRepository<Candle, Long> {
     void insertCandle(Candle candle);
 
     @Query("SELECT c FROM Candle c order by c.timeClose DESC LIMIT 2")
-    List<Candle> getLastCandle();
+    List<Candle> getTwoLastCandle();
 
     @Query("SELECT c FROM Candle c order by c.timeClose DESC LIMIT 3")
     List<Candle> getThreeLastCandles();
+
+    @Query("SELECT c FROM Candle c order by c.timeClose DESC LIMIT 1")
+    Candle getLastCandle();
 }

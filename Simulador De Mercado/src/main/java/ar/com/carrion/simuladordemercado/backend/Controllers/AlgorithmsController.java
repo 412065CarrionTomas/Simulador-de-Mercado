@@ -1,8 +1,8 @@
 package ar.com.carrion.simuladordemercado.backend.Controllers;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Price;
-import ar.com.carrion.simuladordemercado.backend.Features.Algorithms.RandomAlgorithm.PriceByRandomService;
-import ar.com.carrion.simuladordemercado.backend.Features.Algorithms.TrendFollowersAlgorithm.PriceByTrendFollowerService;
+import ar.com.carrion.simuladordemercado.backend.Services.PriceService.PriceByRandomService;
+import ar.com.carrion.simuladordemercado.backend.Services.PriceService.PriceByTrendFollowerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

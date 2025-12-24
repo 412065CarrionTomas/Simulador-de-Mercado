@@ -1,19 +1,19 @@
-package ar.com.carrion.simuladordemercado.backend.Features.Algorithms.TrendFollowersAlgorithm;
+package ar.com.carrion.simuladordemercado.backend.Algorithm;
 
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
-import ar.com.carrion.simuladordemercado.backend.Persistence.ICandleRepository;
-import org.springframework.stereotype.Service;
+import ar.com.carrion.simuladordemercado.backend.Infrastructure.Candle.ICandleDataRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 
-@Service
-public class TrendFollowersAlgorithmService {
+@Component
+public class TrendFollowersAlgorithm {
 
-    private final ICandleRepository _CandleRepository;
+    private final ICandleDataRepository _CandleRepository;
 
-    public TrendFollowersAlgorithmService(ICandleRepository candleRepository) {
+    public TrendFollowersAlgorithm(ICandleDataRepository candleRepository) {
         _CandleRepository = candleRepository;
     }
 
@@ -56,9 +56,4 @@ public class TrendFollowersAlgorithmService {
             return "Lateralization";
         }
     }
-
-
-
-
-
 }

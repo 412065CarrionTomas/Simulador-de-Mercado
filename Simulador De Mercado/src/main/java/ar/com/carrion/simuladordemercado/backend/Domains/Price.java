@@ -20,5 +20,15 @@ public class Price {
     private double closePrice;
     private double lowExtremePrice;
     private double highExtremePrice;
+
+    @Override
+    public String toString() {
+        return "Price{" +
+                "open=" + openPrice +
+                ", close=" + closePrice +
+                ", high=" + highExtremePrice +
+                ", low=" + lowExtremePrice +
+                '}';
+    }
 }
 
