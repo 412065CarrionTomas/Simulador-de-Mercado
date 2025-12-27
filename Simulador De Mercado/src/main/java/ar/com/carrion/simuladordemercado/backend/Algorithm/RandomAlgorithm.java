@@ -1,79 +1,49 @@
 package ar.com.carrion.simuladordemercado.backend.Algorithm;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
-import ar.com.carrion.simuladordemercado.backend.Domains.OrderBook;
-import ar.com.carrion.simuladordemercado.backend.Services.OrderBookService.OrderBookService;
+import ar.com.carrion.simuladordemercado.backend.Domains.Price;
 
-public class RandomAlgorithm {
-    private final OrderBookService orderBookService;
+import java.util.Random;
 
-    public RandomAlgorithm(OrderBookService orderBookService) {
-        this.orderBookService = orderBookService;
+public class RandomAlgorithm implements IAlgorithStrategy {
+
+    private final Random random = new Random();
+
+    @Override
+    public Order execute(double price) {
+        boolean isMaker = random.nextBoolean();
+        boolean isBuyer = random.nextBoolean();
+
+        String typeOrder = isBuyer ? "buy" : "sell";
+
+        return isMaker
+                ? createMakerOrder(typeOrder, price, 1)
+                : createTakerOrder(typeOrder);
     }
 
-    public OrderBook random(double price, OrderBook orderBook){
-        String typeOfRandom = randomType();
-        Order order = createOrder(price,1);
-
-        switch (typeOfRandom){
-            case "MakerAndBuyer" -> orderBookService.addBuyOrder(order);
-            case "MakerAndSeller" -> orderBookService.addSellOrder(order);
-        }
-    }
-
-    private Order createOrder(double price, int quantity){
+    private Order createMakerOrder(String typeOrder, double price, int quantity) {
         Order order = new Order();
-        order.setPrice(randomNewPrice(price));
+        order.setTypeOrder(typeOrder);
+
+        Price priceObj = new Price();
+        priceObj.setPrice(randomNewPrice(price));
+        order.setPrice(priceObj);
+
         order.setQuantity(quantity);
         return order;
     }
 
-    private String randomType(){
-        int randomBit = Math.random() < 0.5 ? 0 : 1;
-        boolean makerOrTaker = (randomBit == 1);
-        boolean buyOrSell = (randomBit == 1);
-
-        if(makerOrTaker == true && buyOrSell == true){
-            return  "MakerAndBuyer";
-        }
-        if (makerOrTaker == true && buyOrSell == false) {
-            return  "MakerAndSeller";
-        }
-        if (makerOrTaker == false && buyOrSell == true){
-            return "TakerAndBuyer";
-        }
-        if(makerOrTaker == false && buyOrSell == false){
-            return "TakerAndSeller";
-        }
-        return "error";
+    private Order createTakerOrder(String typeOrder) {
+        Order orderTake = new Order();
+        orderTake.setTypeOrder(typeOrder);
+        orderTake.setPrice(null);
+        orderTake.setQuantity(0);
+        return orderTake;
     }
 
     private double randomNewPrice(double price) {
-        double percentage = (Math.random() * 10) - 5;
+        double percentage = (random.nextDouble() * 10) - 5;
         double adjusted = price * (1 + percentage / 100);
-        double factor = 1000.0;
-        return ((long) (adjusted * factor)) / factor;
+        return Math.round(adjusted * 1000.0) / 1000.0;
     }
-
 }
-
-//
-//if(typeOfRandom.equals("MakerAndBuyer")){
-//Order order = new Order();
-//            order.setPrice(randomNewPrice(price));
-//        order.setQuantity(1);
-//            orderBook.getAsks().add(order);
-//            return orderBook;
-//        }
-//                if(typeOfRandom.equals("MakerAndSeller")){
-//Order order = new Order();
-//            order.setPrice(randomNewPrice(price));
-//        order.setQuantity(1);
-//            orderBook.getBids().add(order);
-//            return orderBook;
-//        }
-//
-//                if(typeOfRandom.equals("TakerAndBuyer")){
-//        return null;
-//        }
-//        return  null;

@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
-    private double price;
+    private String typeOrder;
+    private Price price;
     private int quantity;
 }

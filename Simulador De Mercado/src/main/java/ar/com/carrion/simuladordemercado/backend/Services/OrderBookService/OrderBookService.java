@@ -21,11 +21,11 @@ public class OrderBookService {
     public void addBuyOrder(Order order) {
         List<Order> bids = orderBook.getBids();
         for (int i = 0; i < bids.size(); i++) {
-            if (bids.get(i).getPrice() == order.getPrice()){
+            if (bids.get(i).getPrice().getPrice() == order.getPrice().getPrice()){
                 bids.get(i).setQuantity(bids.get(i).getQuantity() + order.getQuantity());
                 return;
             }
-            if(bids.get(i).getPrice() < order.getPrice()){
+            if(bids.get(i).getPrice().getPrice() < order.getPrice().getPrice()){
                 bids.add(i, order);
                 return;
             }
@@ -36,11 +36,11 @@ public class OrderBookService {
     public void addSellOrder(Order order) {
         List<Order> asks = orderBook.getAsks();
         for (int i = 0; i < asks.size(); i++) {
-            if (asks.get(i).getPrice() == order.getPrice()){
+            if (asks.get(i).getPrice().getPrice() == order.getPrice().getPrice()){
                 asks.get(i).setQuantity(asks.get(i).getQuantity() + order.getQuantity());
                 return;
             }
-            if(asks.get(i).getPrice() > order.getPrice()){
+            if(asks.get(i).getPrice().getPrice() > order.getPrice().getPrice()){
                 asks.add(i, order);
                 return;
             }
@@ -48,12 +48,19 @@ public class OrderBookService {
         asks.add(order);
     }
 
+    public void takeBuyOrder(){
+        orderBook.getBids().remove(orderBook.getBids().getFirst());
+    }
+    public void takeSellOrder(){
+        orderBook.getAsks().remove(orderBook.getAsks().getFirst());
+    }
+
     private void sortBids(List<Order> bids) {
         if (bids == null || bids.size() <= 1) {
             return;
         }
         // Ordenar de mayor a menor precio (descendente)
-        bids.sort(Comparator.comparingDouble(Order::getPrice).reversed());
+        bids.sort(Comparator.comparing(Order::getPrice).reversed());
     }
 
     private void sortAsks(List<Order> asks) {
@@ -61,6 +68,6 @@ public class OrderBookService {
             return;
         }
         // Ordenar de menor a mayor precio (ascendente)
-        asks.sort(Comparator.comparingDouble(Order::getPrice));
+        asks.sort(Comparator.comparing(Order::getPrice));
     }
 }

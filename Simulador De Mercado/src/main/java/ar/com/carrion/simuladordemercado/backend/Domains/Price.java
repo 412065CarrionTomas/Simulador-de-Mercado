@@ -1,34 +1,34 @@
 package ar.com.carrion.simuladordemercado.backend.Domains;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+
 @Getter
 @Setter
-public class Price {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private double openPrice;
-    private double closePrice;
-    private double lowExtremePrice;
-    private double highExtremePrice;
+@AllArgsConstructor
+@NoArgsConstructor
+public class Price implements Comparable<Price> {
+    private double price;
 
     @Override
-    public String toString() {
-        return "Price{" +
-                "open=" + openPrice +
-                ", close=" + closePrice +
-                ", high=" + highExtremePrice +
-                ", low=" + lowExtremePrice +
-                '}';
+    public int compareTo(Price other) {
+        return Double.compare(this.price, other.price);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Price)) return false;
+        Price price = (Price) o;
+        return Double.compare(price.price, getPrice()) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Double.hashCode(price);
     }
 }
 
