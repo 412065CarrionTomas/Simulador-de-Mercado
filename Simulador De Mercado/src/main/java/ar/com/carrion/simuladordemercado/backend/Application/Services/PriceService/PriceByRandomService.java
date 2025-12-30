@@ -8,19 +8,19 @@
 //public class PriceByRandomService {
 //
 //    private final RandomAlgorithm _RandomAlgorithm;
-//    private final Price price;
+//    private final Price value;
 //    private final OrderBook orderBook;
 //
-//    public PriceByRandomService(RandomAlgorithm randomAlgorithm, Price price, OrderBook orderBook) {
+//    public PriceByRandomService(RandomAlgorithm randomAlgorithm, Price value, OrderBook orderBook) {
 //        _RandomAlgorithm = randomAlgorithm;
-//        this.price = price;
+//        this.value = value;
 //        this.orderBook = orderBook;
 //    }
 //
 //    public Price ModifyPriceByRandom(){
-//        price.setClosePrice(_RandomAlgorithm.RandomPrice(price.getClosePrice()));
-//        modifyPriceExtreme(price);
-//        return price;
+//        value.setClosePrice(_RandomAlgorithm.RandomPrice(value.getClosePrice()));
+//        modifyPriceExtreme(value);
+//        return value;
 //    }
 //
 //    private void modifyPriceExtreme(Price lastPrice){

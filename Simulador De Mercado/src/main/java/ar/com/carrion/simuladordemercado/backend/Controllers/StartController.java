@@ -22,7 +22,7 @@ public class StartController {
 
 //    @GetMapping(value = "/finish", name = "finish_simulation_market")
 //    public String finishSimulationMarket(){
-//        return _InsertCandleService.insertCandle(price,"1m");
+//        return _InsertCandleService.insertCandle(value,"1m");
 //    }
 
 

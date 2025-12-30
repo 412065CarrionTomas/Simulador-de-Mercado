@@ -1,7 +1,7 @@
-package ar.com.carrion.simuladordemercado.backend.Shared.MarketStartup;
+package ar.com.carrion.simuladordemercado.backend.Application.Shared.MarketStartup;
 
 import ar.com.carrion.simuladordemercado.backend.Services.CandleService.CandleService;
-import ar.com.carrion.simuladordemercado.backend.Services.OrderBookService.OrderBookService;
+import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 

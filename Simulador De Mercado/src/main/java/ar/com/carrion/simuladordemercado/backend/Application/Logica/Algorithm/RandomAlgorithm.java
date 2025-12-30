@@ -1,16 +1,18 @@
-package ar.com.carrion.simuladordemercado.backend.Algorithm;
+package ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Domains.Price;
+import jakarta.annotation.Nullable;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
-public class RandomAlgorithm implements IAlgorithStrategy {
+public class RandomAlgorithm {
 
     private final Random random = new Random();
 
-    @Override
-    public Order execute(double price) {
+
+    public Order executeRandom(double price) {
         boolean isMaker = random.nextBoolean();
         boolean isBuyer = random.nextBoolean();
 
@@ -22,23 +24,25 @@ public class RandomAlgorithm implements IAlgorithStrategy {
     }
 
     private Order createMakerOrder(String typeOrder, double price, int quantity) {
-        Order order = new Order();
-        order.setTypeOrder(typeOrder);
+        Order orderMaker = new Order();
+        orderMaker.setTypeOrder(typeOrder);
 
         Price priceObj = new Price();
-        priceObj.setPrice(randomNewPrice(price));
-        order.setPrice(priceObj);
+        priceObj.setValue(randomNewPrice(price));
+        orderMaker.setPrice(priceObj);
 
-        order.setQuantity(quantity);
-        return order;
+        orderMaker.setQuantity(quantity);
+        orderMaker.setTime(LocalDateTime.now());
+        return orderMaker;
     }
 
     private Order createTakerOrder(String typeOrder) {
-        Order orderTake = new Order();
-        orderTake.setTypeOrder(typeOrder);
-        orderTake.setPrice(null);
-        orderTake.setQuantity(0);
-        return orderTake;
+        Order orderTaker = new Order();
+        orderTaker.setTypeOrder(typeOrder);
+        orderTaker.setPrice(null);
+        orderTaker.setQuantity(1);
+        orderTaker.setTime(LocalDateTime.now());
+        return orderTaker;
     }
 
     private double randomNewPrice(double price) {

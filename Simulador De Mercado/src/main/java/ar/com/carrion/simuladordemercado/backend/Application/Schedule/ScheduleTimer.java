@@ -1,4 +1,4 @@
-package ar.com.carrion.simuladordemercado.backend.Schedule;
+package ar.com.carrion.simuladordemercado.backend.Application.Schedule;
 
 import ar.com.carrion.simuladordemercado.backend.Services.CandleService.CandleService;
 import org.springframework.scheduling.annotation.Scheduled;

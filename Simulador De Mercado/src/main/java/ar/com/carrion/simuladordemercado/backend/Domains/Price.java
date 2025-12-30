@@ -11,11 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Price implements Comparable<Price> {
-    private double price;
+    private double value;
 
     @Override
     public int compareTo(Price other) {
-        return Double.compare(this.price, other.price);
+        return Double.compare(this.value, other.value);
     }
 
     @Override
@@ -23,12 +23,12 @@ public class Price implements Comparable<Price> {
         if (this == o) return true;
         if (!(o instanceof Price)) return false;
         Price price = (Price) o;
-        return Double.compare(price.price, getPrice()) == 0;
+        return Double.compare(price.value, getValue()) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(price);
+        return Double.hashCode(value);
     }
 }
 
