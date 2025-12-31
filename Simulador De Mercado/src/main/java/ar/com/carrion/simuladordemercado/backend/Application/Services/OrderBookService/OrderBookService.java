@@ -2,7 +2,6 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBook
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Domains.OrderBook;
-import ar.com.carrion.simuladordemercado.backend.Domains.Price;
 import java.util.Comparator;
 import java.util.List;
 
@@ -29,16 +28,13 @@ public class OrderBookService {
 
     public void addLimitBuyOrder(Order order) {
         validateOrder(order);
-
         List<Order> bids = orderBook.getBids();
+        double orderPriceReceive = order.getPrice().getValue();
 
         for (int i = 0; i < bids.size(); i++) {
-            Order current = bids.get(i);
-            if (current.getPrice().getValue() < order.getPrice().getValue() ||
-                    (current.getPrice().getValue() == order.getPrice().getValue() &&
-                            current.getTime().isBefore(order.getTime())
-                    )
-            ) {
+            double orderPriceInList = bids.get(i).getPrice().getValue();
+            if (orderPriceInList < orderPriceReceive ||
+                    (orderPriceInList == orderPriceReceive && bids.get(i).getTime().isBefore(order.getTime()))) {
                 bids.add(i, order);
                 return;
             }
@@ -50,14 +46,12 @@ public class OrderBookService {
         validateOrder(order);
 
         List<Order> asks = orderBook.getAsks();
+        double orderPriceReceive = order.getPrice().getValue();
 
         for (int i = 0; i < asks.size(); i++) {
-            Order current = asks.get(i);
-            if(current.getPrice().getValue() > order.getPrice().getValue() ||
-                    (current.getPrice().getValue() == order.getPrice().getValue() &&
-                            current.getTime().isBefore(order.getTime())
-                    )
-            ){
+            double orderPriceInList = asks.get(i).getPrice().getValue();
+            if(orderPriceInList > orderPriceReceive ||
+                    (orderPriceInList == orderPriceReceive && asks.get(i).getTime().isBefore(order.getTime()))){
                 asks.add(i,order);
                 return;
             }

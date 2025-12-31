@@ -40,14 +40,18 @@ public class RandomAlgorithm {
         Order orderTaker = new Order();
         orderTaker.setTypeOrder(typeOrder);
         orderTaker.setPrice(null);
-        orderTaker.setQuantity(1);
+        orderTaker.setQuantity(randomQuantity());
         orderTaker.setTime(LocalDateTime.now());
         return orderTaker;
     }
 
     private double randomNewPrice(double price) {
-        double percentage = (random.nextDouble() * 10) - 5;
+        double percentage = (Math.random() * 10) - 5;
         double adjusted = price * (1 + percentage / 100);
         return Math.round(adjusted * 1000.0) / 1000.0;
+    }
+
+    private int randomQuantity() {
+        return (int) (Math.random() * 5) + 1;
     }
 }

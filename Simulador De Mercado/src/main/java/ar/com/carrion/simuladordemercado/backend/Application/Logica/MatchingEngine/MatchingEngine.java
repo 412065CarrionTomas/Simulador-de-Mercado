@@ -27,15 +27,33 @@ public class MatchingEngine {
         return price;
     }
 
-    public double matchEngineToOrderTaker(double price,List<Order> orderList){
-        if(orderList == null || orderList.isEmpty()){
+    public double matchEngineToOrderTaker(double price, Order order, List<Order> oppositeList){
+        if(oppositeList == null || oppositeList.isEmpty()){
             return price;
         }
-        double bestPriceInList = orderList.getFirst().getPrice().getValue();
 
-        orderList.removeFirst();
+        int orderNum = 0;
+        boolean hasMatch = true;
 
-        return bestPriceInList;
+        while (!hasMatch){
+
+            Order orderInList = oppositeList.get(orderNum);
+
+            if(order.getQuantity() > orderInList.getQuantity()){
+                order.setQuantity(order.getQuantity()-orderInList.getQuantity());
+                oppositeList.remove(orderNum);
+            }
+            else if(order.getQuantity() == orderInList.getQuantity()){
+                oppositeList.remove(orderNum);
+                return orderInList.getPrice().getValue();
+            }
+            else if (order.getQuantity() < orderInList.getQuantity()){
+                orderInList.setQuantity(orderInList.getQuantity()-order.getQuantity());
+                return orderInList.getPrice().getValue();
+            }
+
+            orderNum++;
+        }
     }
 
 }

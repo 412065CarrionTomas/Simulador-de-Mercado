@@ -13,11 +13,6 @@ public interface ICandleDataRepository extends JpaRepository<Candle, Long> {
 
     @Transactional
     @Modifying
-    @Query("update Candle set closePrice = :newPrice")
-    void updateClosePrice(double newPrice);
-
-    @Transactional
-    @Modifying
     @Query(value = "INSERT INTO candle (time_frame, time_close, open_price, close_price, low_extreme_price, high_extreme_price) " +
            "VALUES (:#{#candle.timeFrame}, :#{#candle.timeClose}, :#{#candle.openPrice}, :#{#candle.closePrice}, :#{#candle.lowExtremePrice}, " +
             ":#{#candle.highExtremePrice})", nativeQuery = true)
@@ -26,9 +21,11 @@ public interface ICandleDataRepository extends JpaRepository<Candle, Long> {
     @Query("SELECT c FROM Candle c order by c.timeClose DESC LIMIT 2")
     List<Candle> getTwoLastCandle();
 
-    @Query("SELECT c FROM Candle c order by c.timeClose DESC LIMIT 3")
-    List<Candle> getThreeLastCandles();
+    @Transactional
+    default void insertTwoCandles(Candle candle1, Candle candle2) {
+        insertCandle(candle1);
+        insertCandle(candle2);
+    }
 
-    @Query("SELECT c FROM Candle c order by c.timeClose DESC LIMIT 1")
-    Candle getLastCandle();
+
 }

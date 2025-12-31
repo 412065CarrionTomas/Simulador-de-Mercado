@@ -4,6 +4,7 @@ import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.Ra
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchingEngine;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.AlgorithmService.RandomAlgorithmService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
+import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Price;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +20,10 @@ public class AlgorithmConfiguration {
     @Bean
     public RandomAlgorithmService randomAlgorithmService(OrderBookService orderBookService
     , Price price
+                                                         , Candle candle
     , RandomAlgorithm randomAlgorithm
     , MatchingEngine matchingEngine){
-        return new RandomAlgorithmService(orderBookService, price, randomAlgorithm, matchingEngine);
+        return new RandomAlgorithmService(orderBookService, price,candle, randomAlgorithm, matchingEngine);
     }
 
 }

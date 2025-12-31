@@ -1,17 +1,26 @@
 package ar.com.carrion.simuladordemercado.backend.Configuration;
 
+import ar.com.carrion.simuladordemercado.backend.Application.Services.CandleService.CandleService;
+import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Price;
-import ar.com.carrion.simuladordemercado.backend.Services.CandleService.CandleService;
 import ar.com.carrion.simuladordemercado.backend.Infrastructure.Candle.ICandleDataRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.spi.CalendarNameProvider;
 
 @Configuration
 public class CandleConfiguration {
 
     @Bean
+    public Candle candle(){
+        return new Candle();
+    }
+
+    @Bean
     public CandleService candleService(ICandleDataRepository repository,
-                                       Price price){
-        return new CandleService(repository,price);
+                                       Price price,
+                                       Candle candle){
+        return new CandleService(repository,price,candle);
     }
 }

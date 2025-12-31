@@ -30,5 +30,13 @@ public class Price implements Comparable<Price> {
     public int hashCode() {
         return Double.hashCode(value);
     }
+
+    @Override
+    public String toString() {
+        return "Price{" +
+                "value=" + value +
+                '}';
+    }
+
 }
 
