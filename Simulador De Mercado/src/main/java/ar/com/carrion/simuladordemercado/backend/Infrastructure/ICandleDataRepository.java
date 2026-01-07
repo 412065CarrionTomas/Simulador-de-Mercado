@@ -1,4 +1,4 @@
-package ar.com.carrion.simuladordemercado.backend.Infrastructure.Candle;
+package ar.com.carrion.simuladordemercado.backend.Infrastructure;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import jakarta.transaction.Transactional;

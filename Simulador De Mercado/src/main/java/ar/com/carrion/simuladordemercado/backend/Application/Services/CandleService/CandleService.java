@@ -2,7 +2,7 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.CandleSer
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Price;
-import ar.com.carrion.simuladordemercado.backend.Infrastructure.Candle.ICandleDataRepository;
+import ar.com.carrion.simuladordemercado.backend.Infrastructure.ICandleDataRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,10 +47,12 @@ public class CandleService {
         candle.setLowExtremePrice(priceInBD.get(1).getLowExtremePrice());
         candle.setHighExtremePrice(priceInBD.get(1).getHighExtremePrice());
         candle.setOpenPrice(priceInBD.get(0).getClosePrice());
-        System.out.println(candle);
 
         value.setValue(priceInBD.get(1).getClosePrice());
+        candle.setClosePrice(value.getValue());
+
         System.out.println(value);
+        System.out.println(candle);
     }
 
     private void startTwoCandleDefault(){

@@ -12,48 +12,81 @@ public class MatchingEngine {
         if(oppositeList == null || oppositeList.isEmpty()){
             return price;
         }
-        double bestPriceInList = oppositeList.getFirst().getPrice().getValue();
 
-        if (order.getPrice().getValue() >= bestPriceInList && order.getTypeOrder().equals("buy")){
-            oppositeList.removeFirst();
-            otherList.remove(order);
-            return bestPriceInList;
+        int remainingQuantity = order.getQuantity();
+        double orderPrice = order.getPrice();
+        double priceExecution = price;
+
+        if(order.getTypeOrder().equals("buy")) {
+            while (remainingQuantity > 0 && !oppositeList.isEmpty()) {
+                Order firstOrderInList = oppositeList.getFirst();
+
+                if(orderPrice < firstOrderInList.getPrice()){
+                    break;
+                }
+
+                if (remainingQuantity >= firstOrderInList.getQuantity()) {
+                    priceExecution = firstOrderInList.getPrice();
+                    remainingQuantity -= firstOrderInList.getQuantity();
+                    oppositeList.removeFirst();
+
+                } else {
+                    priceExecution = firstOrderInList.getPrice();
+                    firstOrderInList.setQuantity(firstOrderInList.getQuantity() - remainingQuantity);
+                    remainingQuantity = 0;
+                }
+            }
         }
-        if(order.getPrice().getValue() <= bestPriceInList && order.getTypeOrder().equals("sell")){
-            oppositeList.removeFirst();
-            otherList.remove(order);
-            return bestPriceInList;
+        else{
+            while (remainingQuantity > 0 && !oppositeList.isEmpty()){
+                Order firstsOrderInList = oppositeList.getFirst();
+
+                if (orderPrice > firstsOrderInList.getPrice()){
+                    break;
+                }
+
+                if (remainingQuantity >= firstsOrderInList.getQuantity()){
+                    priceExecution = firstsOrderInList.getPrice();
+                    remainingQuantity -= firstsOrderInList.getQuantity();
+                    oppositeList.removeFirst();
+                } else {
+                    priceExecution = firstsOrderInList.getPrice();
+                    firstsOrderInList.setQuantity(firstsOrderInList.getQuantity()-remainingQuantity);
+                    remainingQuantity = 0;
+                }
+
+            }
         }
-        return price;
+        if(remainingQuantity == 0){
+            otherList.remove(order);
+        } else {
+            order.setQuantity(remainingQuantity);
+        }
+        return priceExecution;
     }
 
-    public double matchEngineToOrderTaker(double price, Order order, List<Order> oppositeList){
-        if(oppositeList == null || oppositeList.isEmpty()){
+    public double matchEngineToOrderTaker(double price, Order order, List<Order> oppositeList) {
+        if (oppositeList == null || oppositeList.isEmpty()) {
             return price;
         }
 
-        int orderNum = 0;
-        boolean hasMatch = true;
+        int remainingQuantity = order.getQuantity();
+        double priceExecution = price;
 
-        while (!hasMatch){
+        while (!oppositeList.isEmpty() && remainingQuantity > 0) {
+            Order firstOrderInList = oppositeList.getFirst();
 
-            Order orderInList = oppositeList.get(orderNum);
-
-            if(order.getQuantity() > orderInList.getQuantity()){
-                order.setQuantity(order.getQuantity()-orderInList.getQuantity());
-                oppositeList.remove(orderNum);
+            if (remainingQuantity >= firstOrderInList.getQuantity()) {
+                priceExecution = firstOrderInList.getPrice();
+                remainingQuantity -= firstOrderInList.getQuantity();
+                oppositeList.removeFirst();
+            } else {
+                priceExecution = firstOrderInList.getPrice();
+                firstOrderInList.setQuantity(firstOrderInList.getQuantity() - remainingQuantity);
+                remainingQuantity = 0;
             }
-            else if(order.getQuantity() == orderInList.getQuantity()){
-                oppositeList.remove(orderNum);
-                return orderInList.getPrice().getValue();
-            }
-            else if (order.getQuantity() < orderInList.getQuantity()){
-                orderInList.setQuantity(orderInList.getQuantity()-order.getQuantity());
-                return orderInList.getPrice().getValue();
-            }
-
-            orderNum++;
         }
-    }
 
+        return priceExecution;
+    }
 }

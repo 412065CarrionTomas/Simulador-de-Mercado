@@ -2,7 +2,7 @@
 //
 //
 //import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
-//import ar.com.carrion.simuladordemercado.backend.Infrastructure.Candle.ICandleDataRepository;
+//import ar.com.carrion.simuladordemercado.backend.Infrastructure.ICandleDataRepository;
 //import org.springframework.stereotype.Component;
 //
 //import java.util.List;

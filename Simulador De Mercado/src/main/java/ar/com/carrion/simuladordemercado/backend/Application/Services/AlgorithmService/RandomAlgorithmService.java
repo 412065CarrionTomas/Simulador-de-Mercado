@@ -31,7 +31,7 @@ public class RandomAlgorithmService {
         Order order = randomAlgorithm.executeRandom(price.getValue());
         boolean hasOrderBuy = true;
 
-        if (order.getPrice() == null) {
+        if (order.getPrice() == 0.00) {
             if ("buy".equals(order.getTypeOrder())) {
                 price.setValue(matchingEngine.matchEngineToOrderTaker(price.getValue(),order, orderBookService.getAllAsks()));
                 return;
@@ -55,10 +55,11 @@ public class RandomAlgorithmService {
                 ,hasOrderBuy ? orderBookService.getAllBids()
                               :orderBookService.getAllAsks()));
 
-        modifyPriceExtreme(price,candle);
+        modifyCandleExtreme(price,candle);
+        strings();
     }
 
-    private void modifyPriceExtreme(Price price, Candle candle){
+    private void modifyCandleExtreme(Price price, Candle candle){
         double currentPrice = price.getValue();
 
         if(currentPrice > candle.getHighExtremePrice()){
@@ -68,6 +69,12 @@ public class RandomAlgorithmService {
         if(currentPrice < candle.getLowExtremePrice()){
             candle.setLowExtremePrice(currentPrice);
         }
+    }
+
+    private void strings(){
+        System.out.println(price.toString());
+        System.out.println(candle.toString());
+        orderBookService.printOrderBook();
     }
 
 }

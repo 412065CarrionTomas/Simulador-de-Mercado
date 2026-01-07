@@ -3,11 +3,9 @@ package ar.com.carrion.simuladordemercado.backend.Configuration;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.CandleService.CandleService;
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Price;
-import ar.com.carrion.simuladordemercado.backend.Infrastructure.Candle.ICandleDataRepository;
+import ar.com.carrion.simuladordemercado.backend.Infrastructure.ICandleDataRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.spi.CalendarNameProvider;
 
 @Configuration
 public class CandleConfiguration {

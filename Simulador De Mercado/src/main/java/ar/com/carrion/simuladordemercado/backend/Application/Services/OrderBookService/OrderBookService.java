@@ -29,10 +29,10 @@ public class OrderBookService {
     public void addLimitBuyOrder(Order order) {
         validateOrder(order);
         List<Order> bids = orderBook.getBids();
-        double orderPriceReceive = order.getPrice().getValue();
+        double orderPriceReceive = order.getPrice();
 
         for (int i = 0; i < bids.size(); i++) {
-            double orderPriceInList = bids.get(i).getPrice().getValue();
+            double orderPriceInList = bids.get(i).getPrice();
             if (orderPriceInList < orderPriceReceive ||
                     (orderPriceInList == orderPriceReceive && bids.get(i).getTime().isBefore(order.getTime()))) {
                 bids.add(i, order);
@@ -46,10 +46,10 @@ public class OrderBookService {
         validateOrder(order);
 
         List<Order> asks = orderBook.getAsks();
-        double orderPriceReceive = order.getPrice().getValue();
+        double orderPriceReceive = order.getPrice();
 
         for (int i = 0; i < asks.size(); i++) {
-            double orderPriceInList = asks.get(i).getPrice().getValue();
+            double orderPriceInList = asks.get(i).getPrice();
             if(orderPriceInList > orderPriceReceive ||
                     (orderPriceInList == orderPriceReceive && asks.get(i).getTime().isBefore(order.getTime()))){
                 asks.add(i,order);
@@ -79,11 +79,11 @@ public class OrderBookService {
         if(order == null){
             throw new NullPointerException();
         }
-        if(order.getPrice() == null){
-            throw new NullPointerException("No puede ingresar Class.Price null. ERROR.");
+        if(order.getPrice() == 0){
+            throw new NullPointerException("No puede ingresar Price 0. ERROR.");
         }
-        if (order.getQuantity() == 0 || order.getPrice().getValue() == 0){
-            throw new IllegalArgumentException("Campo cantidad/precio es 0. ERROR.");
+        if (order.getQuantity() == 0){
+            throw new IllegalArgumentException("Campo cantidad es 0. ERROR.");
         }
         if (!order.getTypeOrder().equals("buy") && !order.getTypeOrder().equals("sell")) {
             throw new IllegalArgumentException("Los tipos de ordenes solo pueden ser buy o sell. ERROR.");
@@ -92,4 +92,11 @@ public class OrderBookService {
             throw new IllegalArgumentException("La fecha no puede ser null. ERROR.");
         }
     }
+
+
+ ///TEST
+     public void printOrderBook(){
+         System.out.println(orderBook.toString());
+     }
+
 }

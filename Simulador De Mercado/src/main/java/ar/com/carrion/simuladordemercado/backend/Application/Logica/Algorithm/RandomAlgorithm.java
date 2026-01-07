@@ -1,8 +1,6 @@
 package ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
-import ar.com.carrion.simuladordemercado.backend.Domains.Price;
-import jakarta.annotation.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -19,19 +17,15 @@ public class RandomAlgorithm {
         String typeOrder = isBuyer ? "buy" : "sell";
 
         return isMaker
-                ? createMakerOrder(typeOrder, price, 1)
+                ? createMakerOrder(typeOrder, price)
                 : createTakerOrder(typeOrder);
     }
 
-    private Order createMakerOrder(String typeOrder, double price, int quantity) {
+    private Order createMakerOrder(String typeOrder, double price) {
         Order orderMaker = new Order();
         orderMaker.setTypeOrder(typeOrder);
-
-        Price priceObj = new Price();
-        priceObj.setValue(randomNewPrice(price));
-        orderMaker.setPrice(priceObj);
-
-        orderMaker.setQuantity(quantity);
+        orderMaker.setPrice(randomNewPrice(price));
+        orderMaker.setQuantity(randomQuantity());
         orderMaker.setTime(LocalDateTime.now());
         return orderMaker;
     }
@@ -39,7 +33,7 @@ public class RandomAlgorithm {
     private Order createTakerOrder(String typeOrder) {
         Order orderTaker = new Order();
         orderTaker.setTypeOrder(typeOrder);
-        orderTaker.setPrice(null);
+        orderTaker.setPrice(0.00);
         orderTaker.setQuantity(randomQuantity());
         orderTaker.setTime(LocalDateTime.now());
         return orderTaker;
