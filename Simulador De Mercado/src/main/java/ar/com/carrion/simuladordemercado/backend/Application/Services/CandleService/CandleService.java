@@ -1,7 +1,6 @@
 package ar.com.carrion.simuladordemercado.backend.Application.Services.CandleService;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
-import ar.com.carrion.simuladordemercado.backend.Domains.Price;
 import ar.com.carrion.simuladordemercado.backend.Infrastructure.ICandleDataRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,18 +8,16 @@ import java.util.List;
 public class CandleService {
 
     private final ICandleDataRepository candleDataRepository;
-    private final Price value;
     private final Candle candle;
 
-    public CandleService(ICandleDataRepository candleDataRepository, Price value, Candle candle) {
+    public CandleService(ICandleDataRepository candleDataRepository, Candle candle) {
         this.candleDataRepository = candleDataRepository;
-        this.value = value;
         this.candle = candle;
     }
 
     public void insertCandle(){
         candle.setOpenPrice(candle.getOpenPrice());
-        candle.setClosePrice(value.getValue());
+        candle.setClosePrice(candle.getClosePrice());
         candle.setHighExtremePrice(candle.getHighExtremePrice());
         candle.setLowExtremePrice(candle.getLowExtremePrice());
         candle.setTimeFrame(candle.getTimeFrame());
@@ -30,28 +27,26 @@ public class CandleService {
     }
 
     public void selectLastTwoCandles(){
-        List<Candle> priceInBD = candleDataRepository.getTwoLastCandle();
+        List<Candle> candlesInBD = candleDataRepository.getTwoLastCandle();
 
-        if (priceInBD.get(1) == null || priceInBD.get(0) == null){
+        if (candlesInBD.get(1) == null || candlesInBD.get(0) == null){
             startTwoCandleDefault();
-            priceInBD = candleDataRepository.getTwoLastCandle();
+            candlesInBD = candleDataRepository.getTwoLastCandle();
         }
-        if(priceInBD.get(0).getOpenPrice() == 0 || priceInBD.get(1).getOpenPrice() == 0 ||
-        priceInBD.get(0).getClosePrice() == 0 || priceInBD.get(1).getClosePrice() == 0){
+        if(candlesInBD.get(0).getOpenPrice() == 0 || candlesInBD.get(1).getOpenPrice() == 0 ||
+        candlesInBD.get(0).getClosePrice() == 0 || candlesInBD.get(1).getClosePrice() == 0){
             startTwoCandleDefault();
-            priceInBD = candleDataRepository.getTwoLastCandle();
+            candlesInBD = candleDataRepository.getTwoLastCandle();
         }
 
-        candle.setTimeClose(priceInBD.get(1).getTimeClose());
-        candle.setTimeFrame(priceInBD.get(1).getTimeFrame());
-        candle.setLowExtremePrice(priceInBD.get(1).getLowExtremePrice());
-        candle.setHighExtremePrice(priceInBD.get(1).getHighExtremePrice());
-        candle.setOpenPrice(priceInBD.get(0).getClosePrice());
+        candle.setTimeClose(candlesInBD.get(1).getTimeClose());
+        candle.setTimeFrame(candlesInBD.get(1).getTimeFrame());
+        candle.setLowExtremePrice(candlesInBD.get(1).getLowExtremePrice());
+        candle.setHighExtremePrice(candlesInBD.get(1).getHighExtremePrice());
+        candle.setOpenPrice(candlesInBD.get(0).getClosePrice());
+        candle.setClosePrice(candlesInBD.get(1).getClosePrice());
 
-        value.setValue(priceInBD.get(1).getClosePrice());
-        candle.setClosePrice(value.getValue());
-
-        System.out.println(value);
+        System.out.println(candle.getClosePrice());
         System.out.println(candle);
     }
 

@@ -1,18 +1,13 @@
 package ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
-
 import java.time.LocalDateTime;
-import java.util.Random;
 
 public class RandomAlgorithm {
 
-    private final Random random = new Random();
-
-
     public Order executeRandom(double price) {
-        boolean isMaker = random.nextBoolean();
-        boolean isBuyer = random.nextBoolean();
+        boolean isMaker = Math.random() < 0.5;
+        boolean isBuyer = Math.random() < 0.5;
 
         String typeOrder = isBuyer ? "buy" : "sell";
 

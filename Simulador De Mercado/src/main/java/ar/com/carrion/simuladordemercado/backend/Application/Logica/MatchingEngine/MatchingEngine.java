@@ -65,28 +65,47 @@ public class MatchingEngine {
         return priceExecution;
     }
 
-    public double matchEngineToOrderTaker(double price, Order order, List<Order> oppositeList) {
+    public MatchResult matchEngineToOrderTaker(double price, Order order, List<Order> oppositeList) {
+        MatchResult matchResult = new MatchResult();
+        matchResult.setOrder(order);
+        matchResult.setFullyExecuted(false);
+        matchResult.setPriceExecution(price);
+
         if (oppositeList == null || oppositeList.isEmpty()) {
-            return price;
+            return matchResult;
         }
 
+        order.setPrice(oppositeList.getFirst().getPrice());
         int remainingQuantity = order.getQuantity();
         double priceExecution = price;
 
         while (!oppositeList.isEmpty() && remainingQuantity > 0) {
             Order firstOrderInList = oppositeList.getFirst();
 
+            if(order.getTypeOrder().equals("buy") && order.getPrice() < oppositeList.getFirst().getPrice()){
+                return matchResult;
+            }
+            if(order.getTypeOrder().equals("sell") && order.getPrice() > oppositeList.getFirst().getPrice()){
+                return matchResult;
+            }
+
             if (remainingQuantity >= firstOrderInList.getQuantity()) {
-                priceExecution = firstOrderInList.getPrice();
+                matchResult.setPriceExecution(firstOrderInList.getPrice());
                 remainingQuantity -= firstOrderInList.getQuantity();
                 oppositeList.removeFirst();
             } else {
-                priceExecution = firstOrderInList.getPrice();
                 firstOrderInList.setQuantity(firstOrderInList.getQuantity() - remainingQuantity);
-                remainingQuantity = 0;
+                matchResult.setPriceExecution(firstOrderInList.getPrice());
+                matchResult.setOrder(null);
+                matchResult.setFullyExecuted(true);
+                return matchResult;
             }
         }
 
-        return priceExecution;
+        order.setQuantity(remainingQuantity);
+        matchResult.setOrder(order);
+        matchResult.setFullyExecuted(false);
+
+        return matchResult;
     }
 }
