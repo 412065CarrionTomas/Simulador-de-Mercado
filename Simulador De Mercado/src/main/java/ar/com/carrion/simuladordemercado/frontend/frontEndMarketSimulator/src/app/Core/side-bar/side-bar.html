@@ -1,0 +1,26 @@
+<div class="side-bar">
+  <div class="side-bar-header">
+    <h2>Main Menu</h2>
+  </div>
+
+  <div class="side-bar-menu">
+    <ul class="menu-list">
+      <li class="dropdown">
+        <a (click)="toggleDropdown($event)" class="dropdown-toggle">
+          OrderBook
+          <span class="arrow">▼</span>
+        </a>
+        <ul class="dropdown-menu" [class.active]="isDropdownOpen">
+          <li><a (click)="selectOption('asks')"><app-all-asks></app-all-asks></a></li>
+          <li><a (click)="selectOption('bids')"><app-all-bids></app-all-bids></a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="side-bar-footer">
+    <app-start-market-button></app-start-market-button>
+    <hr>
+    <app-finish-market-button></app-finish-market-button>
+  </div>
+</div>

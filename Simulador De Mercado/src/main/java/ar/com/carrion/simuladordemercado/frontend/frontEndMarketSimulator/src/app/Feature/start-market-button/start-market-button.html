@@ -1,0 +1,7 @@
+<button
+  class="start-market-button"
+  (click)="startMarket()"
+  [disabled]="isLoading">
+  {{ isLoading ? 'Comenzando...' : 'Comienza Mercado' }}
+</button>
+

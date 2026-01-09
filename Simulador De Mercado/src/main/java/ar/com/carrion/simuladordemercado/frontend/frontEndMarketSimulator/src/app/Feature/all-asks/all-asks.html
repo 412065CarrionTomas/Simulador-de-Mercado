@@ -1,0 +1,17 @@
+<table class="asks-table">
+  <thead>
+  <tr>
+    <th colspan="2" class="main-header">ASKS</th>
+  </tr>
+  <tr>
+    <th class="column-header">Price</th>
+    <th class="column-header">Quantity</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let order of orders | slice:0:8">
+    <td>{{ order.price }}</td>
+    <td>{{ order.quantity }}</td>
+  </tr>
+  </tbody>
+</table>
