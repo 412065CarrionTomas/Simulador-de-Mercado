@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -18,23 +19,36 @@ public class Candle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String timeFrame;
-    private LocalDateTime timeClose;
-    private double openPrice;
-    private double closePrice;
-    private double lowExtremePrice;
-    private double highExtremePrice;
+//    private String timeFrame;
+    private LocalDateTime time;
+    private double open;
+    private double close;
+    private double low;
+    private double high;
 
     @Override
     public String toString() {
         return "Candle{" +
                 "id=" + id +
-                ", timeFrame='" + timeFrame + '\'' +
-                ", timeClose=" + timeClose +
-                ", openPrice=" + openPrice +
-                ", closePrice=" + closePrice +
-                ", lowExtremePrice=" + lowExtremePrice +
-                ", highExtremePrice=" + highExtremePrice +
+                ", timeClose=" + time +
+                ", openPrice=" + open +
+                ", closePrice=" + close +
+                ", lowExtremePrice=" + low +
+                ", highExtremePrice=" + high +
                 '}';
     }
 }
+
+
+//@Override
+//public String toString() {
+//    return "Candle{" +
+//            "id=" + id +
+//            ", timeFrame='" + timeFrame + '\'' +
+//            ", timeClose=" + timeClose +
+//            ", openPrice=" + openPrice +
+//            ", closePrice=" + closePrice +
+//            ", lowExtremePrice=" + lowExtremePrice +
+//            ", highExtremePrice=" + highExtremePrice +
+//            '}';
+//}

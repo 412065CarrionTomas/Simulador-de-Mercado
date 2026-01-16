@@ -25,25 +25,25 @@ public class RandomAlgorithmService {
     }
 
     public void randomAlgorithm(){
-        Order order = randomAlgorithm.executeRandom(candle.getClosePrice());
+        Order order = randomAlgorithm.executeRandom(candle.getClose());
         boolean hasOrderBuy = true;
         MatchResult matchResult;
 
         if (order.getPrice() == 0.00) {
             if ("buy".equals(order.getTypeOrder())) {
-                matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClosePrice(),order,orderBookService.getAllAsks());
+                matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClose(),order,orderBookService.getAllAsks());
                 if(matchResult.getOrder() != null && !matchResult.isFullyExecuted()){
                     orderBookService.addLimitBuyOrder(order);
                 }
-                candle.setClosePrice(matchResult.getPriceExecution());
+                candle.setClose(matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
                 return;
             } else {
-                matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClosePrice(),order,orderBookService.getAllBids());
+                matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClose(),order,orderBookService.getAllBids());
                 if(matchResult.getOrder() != null && !matchResult.isFullyExecuted()){
                     orderBookService.addLimitSellOrder(order);
                 }
-                candle.setClosePrice(matchResult.getPriceExecution());
+                candle.setClose(matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
                 return;
             }
@@ -56,7 +56,7 @@ public class RandomAlgorithmService {
             }
         }
 
-        candle.setClosePrice(matchingEngine.matchEngineToOrder(candle.getClosePrice()
+        candle.setClose(matchingEngine.matchEngineToOrder(candle.getClose()
                 ,order
                 ,hasOrderBuy ? orderBookService.getAllAsks()
                               :orderBookService.getAllBids()
@@ -68,14 +68,14 @@ public class RandomAlgorithmService {
     }
 
     private void modifyCandleExtreme(Candle candle){
-        double currentPrice = candle.getClosePrice();
+        double currentPrice = candle.getClose();
 
-        if(currentPrice > candle.getHighExtremePrice()){
-            candle.setHighExtremePrice(currentPrice);
+        if(currentPrice > candle.getHigh()){
+            candle.setHigh(currentPrice);
         }
 
-        if(currentPrice < candle.getLowExtremePrice()){
-            candle.setLowExtremePrice(currentPrice);
+        if(currentPrice < candle.getLow()){
+            candle.setLow(currentPrice);
         }
     }
 

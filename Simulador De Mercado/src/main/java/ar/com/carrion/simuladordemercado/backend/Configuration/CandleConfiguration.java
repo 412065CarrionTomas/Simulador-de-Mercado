@@ -17,6 +17,6 @@ public class CandleConfiguration {
     @Bean
     public CandleService candleService(ICandleDataRepository repository,
                                        Candle candle){
-        return new CandleService(repository,candle);
+        return new CandleService(repository, candle);
     }
 }
