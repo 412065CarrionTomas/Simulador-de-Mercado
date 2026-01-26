@@ -23,4 +23,8 @@ public class OrderService {
         orderDataRepository.deleteAll();
     }
 
+    public void deleteAllOrderBook(){
+        orderDataRepository.deleteAll();
+    }
+
 }

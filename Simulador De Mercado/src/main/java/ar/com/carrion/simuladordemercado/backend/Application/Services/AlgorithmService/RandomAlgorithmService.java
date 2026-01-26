@@ -3,9 +3,12 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.Algorithm
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.RandomAlgorithm;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchResult;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchingEngine;
+import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookNotificationService;
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
+
+import java.util.function.Function;
 
 public class RandomAlgorithmService {
 
@@ -13,15 +16,17 @@ public class RandomAlgorithmService {
     private final Candle candle;
     private final RandomAlgorithm randomAlgorithm;
     private final MatchingEngine matchingEngine;
+    private final OrderBookNotificationService notificationService;
 
     public RandomAlgorithmService(OrderBookService orderBookService
             , Candle candle
             , RandomAlgorithm randomAlgorithm
-            , MatchingEngine matchingEngine) {
+            , MatchingEngine matchingEngine, OrderBookNotificationService notificationService) {
         this.orderBookService = orderBookService;
         this.candle = candle;
         this.randomAlgorithm = randomAlgorithm;
         this.matchingEngine = matchingEngine;
+        this.notificationService = notificationService;
     }
 
     public void randomAlgorithm(){
@@ -30,24 +35,34 @@ public class RandomAlgorithmService {
         MatchResult matchResult;
 
         if (order.getPrice() == 0.00) {
+
             if ("buy".equals(order.getTypeOrder())) {
                 matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClose(),order,orderBookService.getAllAsks());
+
                 if(matchResult.getOrder() != null && !matchResult.isFullyExecuted()){
                     orderBookService.addLimitBuyOrder(order);
                 }
+
                 candle.setClose(matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
+                notifyOrderBook();
                 return;
+
             } else {
                 matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClose(),order,orderBookService.getAllBids());
+
                 if(matchResult.getOrder() != null && !matchResult.isFullyExecuted()){
                     orderBookService.addLimitSellOrder(order);
                 }
+
                 candle.setClose(matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
+                notifyOrderBook();
                 return;
+
             }
         } else {
+
             if ("buy".equals(order.getTypeOrder())) {
                 orderBookService.addLimitBuyOrder(order);
             } else {
@@ -64,7 +79,14 @@ public class RandomAlgorithmService {
                               :orderBookService.getAllAsks()));
 
         modifyCandleExtreme(candle);
-        strings();
+        notifyOrderBook();
+    }
+
+    private void notifyOrderBook() {
+        notificationService.notifyOrderBookUpdate(
+                orderBookService.getAllBids(),
+                orderBookService.getAllAsks()
+        );
     }
 
     private void modifyCandleExtreme(Candle candle){
@@ -77,11 +99,6 @@ public class RandomAlgorithmService {
         if(currentPrice < candle.getLow()){
             candle.setLow(currentPrice);
         }
-    }
-
-    private void strings(){
-        System.out.println(candle.toString());
-        orderBookService.printOrderBook();
     }
 
 }

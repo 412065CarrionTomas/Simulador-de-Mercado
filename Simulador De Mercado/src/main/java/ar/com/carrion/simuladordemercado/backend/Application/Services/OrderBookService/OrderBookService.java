@@ -8,9 +8,11 @@ import java.util.List;
 public class OrderBookService {
 
     private final OrderBook orderBook;
+    private final OrderBookNotificationService orderBookNotificationService;
 
-    public OrderBookService(OrderBook orderBook) {
+    public OrderBookService(OrderBook orderBook, OrderBookNotificationService orderBookNotificationService) {
         this.orderBook = orderBook;
+        this.orderBookNotificationService = orderBookNotificationService;
     }
 
     public List<Order> getAllBids(){

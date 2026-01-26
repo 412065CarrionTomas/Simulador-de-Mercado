@@ -17,13 +17,9 @@ import java.util.List;
 @RestController
 public class AlgorithmsController {
     private final RandomAlgorithmService randomAlgorithmService;
-    private final OrderBookService orderBookService;
-    private final Candle candle;
 
-    public AlgorithmsController(RandomAlgorithmService randomAlgorithmService, OrderBookService orderBookService, Candle candle) {
+    public AlgorithmsController(RandomAlgorithmService randomAlgorithmService) {
         this.randomAlgorithmService = randomAlgorithmService;
-        this.orderBookService = orderBookService;
-        this.candle = candle;
     }
 
     @GetMapping("/randomAlgorithm")
@@ -31,13 +27,5 @@ public class AlgorithmsController {
         randomAlgorithmService.randomAlgorithm();
     }
 
-    @GetMapping("/getAllBids")
-    public List<Order> getAllBids(){
-        return orderBookService.getAllBids();
-    }
 
-    @GetMapping("/getAllAsks")
-    public List<Order> getAllAsks(){
-        return orderBookService.getAllAsks();
-    }
 }

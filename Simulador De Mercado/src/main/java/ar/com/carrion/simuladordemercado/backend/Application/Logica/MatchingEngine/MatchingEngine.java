@@ -67,19 +67,18 @@ public class MatchingEngine {
 
     public MatchResult matchEngineToOrderTaker(double price, Order order, List<Order> oppositeList) {
         MatchResult matchResult = new MatchResult();
+        order.setPrice(price);
         matchResult.setOrder(order);
         matchResult.setFullyExecuted(false);
         matchResult.setPriceExecution(price);
 
         if (oppositeList == null || oppositeList.isEmpty()) {
-            return matchResult;
+             return matchResult;
         }
 
         order.setPrice(oppositeList.getFirst().getPrice());
-        int remainingQuantity = order.getQuantity();
-        double priceExecution = price;
 
-        while (!oppositeList.isEmpty() && remainingQuantity > 0) {
+        while (!oppositeList.isEmpty() && order.getQuantity() > 0) {
             Order firstOrderInList = oppositeList.getFirst();
 
             if(order.getTypeOrder().equals("buy") && order.getPrice() < oppositeList.getFirst().getPrice()){
@@ -89,12 +88,12 @@ public class MatchingEngine {
                 return matchResult;
             }
 
-            if (remainingQuantity >= firstOrderInList.getQuantity()) {
+            if (order.getQuantity() >= firstOrderInList.getQuantity()) {
                 matchResult.setPriceExecution(firstOrderInList.getPrice());
-                remainingQuantity -= firstOrderInList.getQuantity();
+                order.setQuantity(order.getQuantity()-firstOrderInList.getQuantity());
                 oppositeList.removeFirst();
             } else {
-                firstOrderInList.setQuantity(firstOrderInList.getQuantity() - remainingQuantity);
+                firstOrderInList.setQuantity(firstOrderInList.getQuantity() - order.getQuantity());
                 matchResult.setPriceExecution(firstOrderInList.getPrice());
                 matchResult.setOrder(null);
                 matchResult.setFullyExecuted(true);
@@ -102,10 +101,13 @@ public class MatchingEngine {
             }
         }
 
-        order.setQuantity(remainingQuantity);
-        matchResult.setOrder(order);
-        matchResult.setFullyExecuted(false);
-
+        if(order.getQuantity() == 0){
+            matchResult.setOrder(null);
+            matchResult.setFullyExecuted(true);
+        }
+        if(oppositeList.isEmpty()){
+            return matchResult;
+        }
         return matchResult;
     }
 }
