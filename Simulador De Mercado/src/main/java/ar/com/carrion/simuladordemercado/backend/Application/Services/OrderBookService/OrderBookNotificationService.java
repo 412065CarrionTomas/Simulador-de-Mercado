@@ -2,6 +2,7 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBook
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import java.util.List;
 
 public class OrderBookNotificationService {
@@ -11,9 +12,10 @@ public class OrderBookNotificationService {
         this.template = template;
     }
 
+
     public void notifyOrderBookUpdate(List<Order> listBids, List<Order> listAsks){
-        template.convertAndSend("/orders/bids", listBids);
-        template.convertAndSend("/orders/asks", listAsks);
+        template.convertAndSend("/topic/bids", listBids);
+        template.convertAndSend("/topic/asks", listAsks);
     }
 
 }

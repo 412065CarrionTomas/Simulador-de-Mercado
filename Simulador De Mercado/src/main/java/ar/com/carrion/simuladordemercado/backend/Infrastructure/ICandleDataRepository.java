@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -13,19 +14,22 @@ public interface ICandleDataRepository extends JpaRepository<Candle, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO candle (time, open, close, low, high) " +
-            "VALUES (:#{#candle.time}, :#{#candle.open}, :#{#candle.close}, :#{#candle.low}, :#{#candle.high})",
+    @Query(value = "INSERT INTO candle (time, open, close, low, high, time_frame) " +
+            "VALUES (:#{#candle.time}, :#{#candle.open}, :#{#candle.close}, :#{#candle.low}, :#{#candle.high}, :#{#candle.timeFrame})",
             nativeQuery = true)
     void insertCandle(Candle candle);
 
-    @Query("SELECT c FROM Candle c order by c.time DESC LIMIT 2")
+    @Query("SELECT c FROM Candle c WHERE c.timeFrame='M1' ORDER BY c.time DESC LIMIT 2")
     List<Candle> getTwoLastCandle();
-
     @Transactional
     default void insertTwoCandles(Candle candle1, Candle candle2) {
         insertCandle(candle1);
         insertCandle(candle2);
     }
 
+    @Query("SELECT c FROM Candle c WHERE c.timeFrame = :timeFrame ORDER BY c.time DESC LIMIT :count")
+    List<Candle> getNCandleInXTimeFrame(@Param("count") int count, @Param("timeFrame") String timeFrame);
 
+
+    String time(Long time);
 }

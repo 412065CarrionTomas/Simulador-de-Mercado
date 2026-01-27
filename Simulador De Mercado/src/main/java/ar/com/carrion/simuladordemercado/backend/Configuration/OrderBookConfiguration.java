@@ -15,10 +15,8 @@ public class OrderBookConfiguration {
     }
 
     @Bean
-    public OrderBookService orderBookService(OrderBook orderBook,
-                                             OrderBookNotificationService notificationService){
-        return new OrderBookService(orderBook,
-                notificationService);
+    public OrderBookService orderBookService(OrderBook orderBook){
+        return new OrderBookService(orderBook);
     }
 
     @Bean

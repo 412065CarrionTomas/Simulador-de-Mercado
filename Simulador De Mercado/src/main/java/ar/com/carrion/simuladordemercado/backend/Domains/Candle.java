@@ -7,9 +7,6 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 
 @Entity
 @Getter
@@ -20,7 +17,8 @@ public class Candle {
     private Long id;
 
 //    private String timeFrame;
-    private LocalDateTime time;
+    private Long time;
+    private String timeFrame;
     private double open;
     private double close;
     private double low;
@@ -31,6 +29,7 @@ public class Candle {
         return "Candle{" +
                 "id=" + id +
                 ", timeClose=" + time +
+                ",timeFrame="+ timeFrame+
                 ", openPrice=" + open +
                 ", closePrice=" + close +
                 ", lowExtremePrice=" + low +
@@ -38,17 +37,3 @@ public class Candle {
                 '}';
     }
 }
-
-
-//@Override
-//public String toString() {
-//    return "Candle{" +
-//            "id=" + id +
-//            ", timeFrame='" + timeFrame + '\'' +
-//            ", timeClose=" + timeClose +
-//            ", openPrice=" + openPrice +
-//            ", closePrice=" + closePrice +
-//            ", lowExtremePrice=" + lowExtremePrice +
-//            ", highExtremePrice=" + highExtremePrice +
-//            '}';
-//}

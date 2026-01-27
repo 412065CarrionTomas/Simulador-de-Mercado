@@ -8,11 +8,9 @@ import java.util.List;
 public class OrderBookService {
 
     private final OrderBook orderBook;
-    private final OrderBookNotificationService orderBookNotificationService;
 
-    public OrderBookService(OrderBook orderBook, OrderBookNotificationService orderBookNotificationService) {
+    public OrderBookService(OrderBook orderBook ) {
         this.orderBook = orderBook;
-        this.orderBookNotificationService = orderBookNotificationService;
     }
 
     public List<Order> getAllBids(){
@@ -94,11 +92,4 @@ public class OrderBookService {
             throw new IllegalArgumentException("La fecha no puede ser null. ERROR.");
         }
     }
-
-
- ///TEST
-     public void printOrderBook(){
-         System.out.println(orderBook.toString());
-     }
-
 }

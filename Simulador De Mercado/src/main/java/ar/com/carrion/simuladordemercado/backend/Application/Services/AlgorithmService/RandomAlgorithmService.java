@@ -8,8 +8,6 @@ import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
 
-import java.util.function.Function;
-
 public class RandomAlgorithmService {
 
     private final OrderBookService orderBookService;
