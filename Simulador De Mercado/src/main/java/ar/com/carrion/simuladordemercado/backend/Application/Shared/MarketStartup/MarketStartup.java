@@ -22,6 +22,7 @@ public class MarketStartup implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         orderService.selectAllOrderBook();
+        orderService.deleteAllOrdersInBD();
         candleService.selectLastTwoCandles();
         orderBookService.sortOrderBook();
     }

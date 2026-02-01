@@ -21,10 +21,14 @@ public class OrderBookController {
         this.orderBookService = orderBookService;
     }
 
-    @GetMapping("/inserAllOrdersInOrderBook")
-    public String insertAllOrdersInBook(){
-        orderService.insertOrderBook();
-        return "MarketFinish";
-    }
+    /*
+    * Todavia sin terminar logica. Complicacion con los id autogenerados por spring.
+    * ID suplanta a ID eliminado, genera error.
+    *  */
+
+//    @GetMapping("/inserAllOrdersInOrderBook")
+//    public void insertAllOrdersInBook(){
+//        orderService.insertOrderBook();
+//    }
 
 }

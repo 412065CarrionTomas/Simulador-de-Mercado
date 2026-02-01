@@ -14,25 +14,25 @@ public class ScheduleTimer {
         this.candleService = candleService;
     }
 
-    @Scheduled(cron = "0 * * * * *")
-    public void insertCandles() throws InterruptedException {
-        candleService.insertCandle("M1");
-
-        countM5 +=1;
-        countM10 +=1;
-
-        if (countM5 == 5){
-            candleService.buildAndInsertCandle("M1", "M5");
-            countM5 =0;
-            Thread.sleep(2000);
-        }
-
-        if( countM10 ==10){
-            candleService.buildAndInsertCandle("M1", "M10");
-            countM10 =0;
-            Thread.sleep(4000);
-        }
-
-        candleService.selectLastTwoCandles();
-    }
+//    @Scheduled(cron = "0 * * * * *")
+//    public void insertCandles() throws InterruptedException {
+//        candleService.insertCandle("M1");
+//
+//        countM5 +=1;
+//        countM10 +=1;
+//
+//        if (countM5 == 5){
+//            candleService.buildAndInsertCandle("M1", "M5");
+//            countM5 =0;
+//            Thread.sleep(2000);
+//        }
+//
+//        if( countM10 ==10){
+//            candleService.buildAndInsertCandle("M1", "M10");
+//            countM10 =0;
+//            Thread.sleep(4000);
+//        }
+//
+//        candleService.selectLastTwoCandles();
+//    }
 }

@@ -18,8 +18,11 @@ public class OrderService {
     }
 
     public void selectAllOrderBook(){
-        orderBook.setBids(orderDataRepository.findByTypeOrder("Buy"));
-        orderBook.setAsks(orderDataRepository.findByTypeOrder("Sell"));
+        orderBook.setBids(orderDataRepository.findByTypeOrder("buy"));
+        orderBook.setAsks(orderDataRepository.findByTypeOrder("sell"));
+    }
+
+    public void deleteAllOrdersInBD(){
         orderDataRepository.deleteAllOrders();
     }
 }

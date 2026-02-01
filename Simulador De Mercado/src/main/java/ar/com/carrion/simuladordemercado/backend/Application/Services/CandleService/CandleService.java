@@ -92,6 +92,11 @@ public class CandleService {
     public void selectLastTwoCandles(){
         List<Candle> candlesInBD = candleDataRepository.getTwoLastCandle();
 
+        if(candlesInBD.size() == 0){
+            startTwoCandleDefault();
+            candlesInBD = candleDataRepository.getTwoLastCandle();
+        }
+
         if (candlesInBD.get(1) == null || candlesInBD.get(0) == null){
             startTwoCandleDefault();
             candlesInBD = candleDataRepository.getTwoLastCandle();
@@ -126,76 +131,8 @@ public class CandleService {
         candle2.setHigh(6000.0);
         candle2.setOpen(4000);
         candle2.setClose(6000.0);
-        candle1.setTimeFrame("M1");
+        candle2.setTimeFrame("M1");
 
         candleDataRepository.insertTwoCandles(candle1,candle2);
     }
 }
-
-//private int takeNecessaryCandles(String timeFrameType, int timeFrameMany, String newTimeFrameType, int newTimeFrameMany){
-//        int necessaryCandles = 1;
-//        switch (timeFrameType) {
-//            case "M":
-//                if (newTimeFrameType.equals("M")) {
-//                    if(timeFrameMany>newTimeFrameMany){
-//                        throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-//                    }
-//                    necessaryCandles = newTimeFrameMany/timeFrameMany;
-//                    if(newTimeFrameMany == 1){
-//                        necessaryCandles = 1;
-//                        break;
-//                    }
-//                    break;
-//                }
-//                if(newTimeFrameType.equals("H")){
-//                    necessaryCandles = (60*newTimeFrameMany)/timeFrameMany;
-//                    break;
-//                }
-//                if (newTimeFrameType.equals("D")){
-//                    necessaryCandles = (1440*newTimeFrameMany)/timeFrameMany;
-//                    break;
-//                }
-//                break;
-//            case "H":
-//                if (newTimeFrameType.equals("M")) {
-//                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-//                }
-//                if(newTimeFrameType.equals("H")){
-//                    if(timeFrameMany>newTimeFrameMany){
-//                        throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-//                    }
-//                    necessaryCandles = newTimeFrameMany/timeFrameMany;
-//                    if(newTimeFrameMany == 1){
-//                        necessaryCandles = 1;
-//                        break;
-//                    }
-//                    break;
-//                }
-//                if (newTimeFrameType.equals("D")){
-//                    necessaryCandles = (60*newTimeFrameMany)/timeFrameMany;
-//                    break;
-//                }
-//                break;
-//
-//            case "D":
-//                if (newTimeFrameType.equals("M")) {
-//                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-//                }
-//                if(newTimeFrameType.equals("H")){
-//                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-//                }
-//                if (newTimeFrameType.equals("D")){
-//                    if(timeFrameMany>newTimeFrameMany){
-//                        throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-//                    }
-//                    necessaryCandles = newTimeFrameMany/timeFrameMany;
-//                    if(newTimeFrameMany == 1){
-//                        necessaryCandles = 1;
-//                        break;
-//                    }
-//                    break;
-//                }
-//                break;
-//        }
-//        return necessaryCandles;
-//    }

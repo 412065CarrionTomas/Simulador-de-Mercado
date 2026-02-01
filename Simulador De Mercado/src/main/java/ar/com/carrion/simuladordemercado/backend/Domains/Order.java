@@ -24,12 +24,4 @@ public class Order {
     private int quantity;
     private LocalDateTime time;
 
-    @Override
-    public String toString() {
-        return String.format("Order{precio=%.2f, tipo='%s', cantidad=%d, tiempo=%s}",
-                price,
-                typeOrder,
-                quantity,
-                time);
-    }
 }

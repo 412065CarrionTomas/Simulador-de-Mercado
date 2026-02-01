@@ -23,16 +23,4 @@ public class Candle {
     private double low;
     private double high;
 
-    @Override
-    public String toString() {
-        return "Candle{" +
-                "id=" + id +
-                ", timeClose=" + time +
-                ",timeFrame="+ timeFrame+
-                ", openPrice=" + open +
-                ", closePrice=" + close +
-                ", lowExtremePrice=" + low +
-                ", highExtremePrice=" + high +
-                '}';
-    }
 }
