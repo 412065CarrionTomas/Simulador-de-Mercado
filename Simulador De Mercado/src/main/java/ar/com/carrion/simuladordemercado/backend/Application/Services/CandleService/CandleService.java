@@ -2,22 +2,20 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.CandleSer
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Infrastructure.ICandleDataRepository;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import java.sql.ClientInfoStatus;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.spi.CalendarDataProvider;
 
 public class CandleService {
 
     private final ICandleDataRepository candleDataRepository;
     private final Candle candle;
+    private final CandleNotificationService candleNotificationService;
 
-    public CandleService(ICandleDataRepository candleDataRepository, Candle candle) {
+    public CandleService(ICandleDataRepository candleDataRepository, Candle candle, CandleNotificationService candleNotificationService) {
         this.candleDataRepository = candleDataRepository;
         this.candle = candle;
+        this.candleNotificationService = candleNotificationService;
     }
 
     public void insertCandle(String timeFrame){
@@ -29,93 +27,61 @@ public class CandleService {
         candle.setTimeFrame(timeFrame);
 
         candleDataRepository.insertCandle(candle);
+        candleNotificationService.notifyCandleUpdate(candle);
     }
 
-    public void buildAndInsertCandle(int quantity, String timeFrame, String newCandleTimeFrame){
-        if (timeFrame.equals("M1") || timeFrame.equals("M5")){ //revisar con claude
-            throw new IllegalArgumentException("You must enter a reasonable candlestick value. M1 and M5. For the moment...");
+    public void buildAndInsertCandle(String timeFrame, String newCandleTimeFrame){
+        String timeFrameType = timeFrame.substring(0, 1);
+        int timeFrameMany = Integer.parseInt(timeFrame.substring(1));
+        String newTimeFrameType = newCandleTimeFrame.substring(0, 1);
+        int newTimeFrameMany = Integer.parseInt(newCandleTimeFrame.substring(1));
+
+        int necessaryCandles = takeNecessaryCandles(timeFrameType,newTimeFrameType,timeFrameMany,newTimeFrameMany);
+
+        try {
+            List<Candle> candlesInBD = candleDataRepository.getNCandleInXTimeFrame(necessaryCandles, timeFrame);
+            Candle newCandle = buildNewCandle(candlesInBD, newCandleTimeFrame);
+            candleDataRepository.insertCandle(newCandle);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Error building candle: " + e.getMessage(), e);
         }
 
-        List<Candle> candlesInBD = candleDataRepository.getNCandleInXTimeFrame(quantity,timeFrame);
+    }
 
-        String timeFrameType = newCandleTimeFrame.substring(1);
-        int timeFrameMany = Integer.parseInt(newCandleTimeFrame.substring(2));
-        String newTimeFrameType = newCandleTimeFrame.substring(1);
-        int newTimeFrameMany = Integer.parseInt(newCandleTimeFrame.substring(2));
+    private int takeNecessaryCandles(String timeFrameType, String newTimeFrameType,
+                                        int timeFrameMany, int newTimeFrameMany){
+        int baseMinutes = convertToMinutes(timeFrameType, timeFrameMany);
+        int targetMinutes = convertToMinutes(newTimeFrameType, newTimeFrameMany);
 
-        int difference = takeDifference(timeFrameType,timeFrameMany,newTimeFrameType,newTimeFrameMany);
-
-        if(candlesInBD.size() < difference){
-            throw new IllegalArgumentException("There is no such quantity of candles from that time.");
+        if (baseMinutes > targetMinutes) {
+            throw new IllegalArgumentException(
+                    "You cannot build backwards. You cannot build smaller candles with longer times."
+            );
         }
+        return targetMinutes/baseMinutes;
+    }
 
+    private int convertToMinutes(String timeFrameType, int timeFrameMany){
+        int minutesPerHour = 60;
+        int minutesPerDay = 1440;
+        return switch (timeFrameType){
+            case "M" -> timeFrameMany;
+            case "H" -> timeFrameMany*minutesPerHour;
+            case "D" -> timeFrameMany*minutesPerDay;
+            default ->  throw new IllegalArgumentException("Invalid timeFrameType: " + timeFrameType);
+        };
+    }
+
+    private Candle buildNewCandle(List<Candle> candles, String timeFrame) {
         Candle newCandle = new Candle();
-
-        newCandle.setOpen(candlesInBD.getLast().getOpen());
-        newCandle.setLow(candlesInBD.getLast().getLow());
-        newCandle.setHigh(candlesInBD.getLast().getHigh());
-        newCandle.setClose(candlesInBD.getFirst().getClose());
+        newCandle.setOpen(candles.getLast().getOpen());
+        newCandle.setClose(candles.getFirst().getClose());
+        newCandle.setLow(candles.stream().mapToDouble(Candle::getLow).min().orElse(0));
+        newCandle.setHigh(candles.stream().mapToDouble(Candle::getHigh).max().orElse(0));
+        newCandle.setTime(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+        newCandle.setTimeFrame(timeFrame);
+        return newCandle;
     }
-
-    private int takeDifference(String timeFrameType,int timeFrameMany,String newTimeFrameType,int newTimeFrameMany){
-        int difference = 0;
-        switch (timeFrameType) {
-            case "M":
-                if (newTimeFrameType.equals("M")) {
-                    if(newTimeFrameMany == 1){
-                        difference = 0;
-                        break;
-                    }
-                    difference = newTimeFrameMany/timeFrameMany;
-                    break;
-                }
-                if(newTimeFrameType.equals("H")){
-                    difference = (60*newTimeFrameMany)/timeFrameMany;
-                    break;
-                }
-                if (newTimeFrameType.equals("D")){
-                    difference = (1440*newTimeFrameMany)/timeFrameMany;
-                    break;
-                }
-                break;
-            case "H":
-                if (newTimeFrameType.equals("M")) {
-                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-                }
-                if(newTimeFrameType.equals("H")){
-                    if(newTimeFrameMany == 1){
-                        difference = 0;
-                        break;
-                    }
-                    difference = newTimeFrameMany/timeFrameMany;
-                    break;
-                }
-                if (newTimeFrameType.equals("D")){
-                    difference = (60*newTimeFrameMany)/timeFrameMany;
-                    break;
-                }
-                break;
-
-            case "D":
-                if (newTimeFrameType.equals("M")) {
-                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-                }
-                if(newTimeFrameType.equals("H")){
-                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
-                }
-                if (newTimeFrameType.equals("D")){
-                    if(newTimeFrameMany == 1){
-                        difference = 0;
-                        break;
-                    }
-                    difference = newTimeFrameMany/timeFrameMany;
-                    break;
-                }
-                break;
-        }
-        return difference;
-    }
-
 
 
 
@@ -165,3 +131,71 @@ public class CandleService {
         candleDataRepository.insertTwoCandles(candle1,candle2);
     }
 }
+
+//private int takeNecessaryCandles(String timeFrameType, int timeFrameMany, String newTimeFrameType, int newTimeFrameMany){
+//        int necessaryCandles = 1;
+//        switch (timeFrameType) {
+//            case "M":
+//                if (newTimeFrameType.equals("M")) {
+//                    if(timeFrameMany>newTimeFrameMany){
+//                        throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
+//                    }
+//                    necessaryCandles = newTimeFrameMany/timeFrameMany;
+//                    if(newTimeFrameMany == 1){
+//                        necessaryCandles = 1;
+//                        break;
+//                    }
+//                    break;
+//                }
+//                if(newTimeFrameType.equals("H")){
+//                    necessaryCandles = (60*newTimeFrameMany)/timeFrameMany;
+//                    break;
+//                }
+//                if (newTimeFrameType.equals("D")){
+//                    necessaryCandles = (1440*newTimeFrameMany)/timeFrameMany;
+//                    break;
+//                }
+//                break;
+//            case "H":
+//                if (newTimeFrameType.equals("M")) {
+//                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
+//                }
+//                if(newTimeFrameType.equals("H")){
+//                    if(timeFrameMany>newTimeFrameMany){
+//                        throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
+//                    }
+//                    necessaryCandles = newTimeFrameMany/timeFrameMany;
+//                    if(newTimeFrameMany == 1){
+//                        necessaryCandles = 1;
+//                        break;
+//                    }
+//                    break;
+//                }
+//                if (newTimeFrameType.equals("D")){
+//                    necessaryCandles = (60*newTimeFrameMany)/timeFrameMany;
+//                    break;
+//                }
+//                break;
+//
+//            case "D":
+//                if (newTimeFrameType.equals("M")) {
+//                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
+//                }
+//                if(newTimeFrameType.equals("H")){
+//                    throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
+//                }
+//                if (newTimeFrameType.equals("D")){
+//                    if(timeFrameMany>newTimeFrameMany){
+//                        throw new IllegalArgumentException("You cannot build backwards. You cannot build smaller candles with longer times.");
+//                    }
+//                    necessaryCandles = newTimeFrameMany/timeFrameMany;
+//                    if(newTimeFrameMany == 1){
+//                        necessaryCandles = 1;
+//                        break;
+//                    }
+//                    break;
+//                }
+//                break;
+//        }
+//        return necessaryCandles;
+//    }

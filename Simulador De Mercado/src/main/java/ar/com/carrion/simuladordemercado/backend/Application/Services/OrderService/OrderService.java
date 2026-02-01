@@ -14,17 +14,12 @@ public class OrderService {
 
     public void insertOrderBook(){
         orderDataRepository.saveAll(orderBook.getAsks());
-        orderDataRepository.saveAll(orderBook.getBids());
+    orderDataRepository.saveAll(orderBook.getBids());
     }
 
     public void selectAllOrderBook(){
         orderBook.setBids(orderDataRepository.findByTypeOrder("Buy"));
         orderBook.setAsks(orderDataRepository.findByTypeOrder("Sell"));
-        orderDataRepository.deleteAll();
+        orderDataRepository.deleteAllOrders();
     }
-
-    public void deleteAllOrderBook(){
-        orderDataRepository.deleteAll();
-    }
-
 }

@@ -27,16 +27,4 @@ public class OrderBookController {
         return "MarketFinish";
     }
 
-//
-//    @MessageMapping("/orders-bids")
-//    @SendTo("/topic/bids")
-//    public List<Order> getAllBids(){
-//        return orderBookService.getAllBids();
-//    }
-//
-//    @MessageMapping("/orders-asks")
-//    @SendTo("/topic/asks")
-//    public List<Order> getAllAsks(){
-//        return orderBookService.getAllAsks();
-//    }
 }

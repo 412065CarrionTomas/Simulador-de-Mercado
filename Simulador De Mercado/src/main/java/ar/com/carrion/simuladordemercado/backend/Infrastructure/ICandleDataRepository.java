@@ -27,8 +27,8 @@ public interface ICandleDataRepository extends JpaRepository<Candle, Long> {
         insertCandle(candle2);
     }
 
-    @Query("SELECT c FROM Candle c WHERE c.timeFrame = :timeFrame ORDER BY c.time DESC LIMIT :count")
-    List<Candle> getNCandleInXTimeFrame(@Param("count") int count, @Param("timeFrame") String timeFrame);
+    @Query("SELECT c FROM Candle c WHERE c.timeFrame = :timeFrame ORDER BY c.time DESC LIMIT :differences")
+    List<Candle> getNCandleInXTimeFrame(@Param("differences") int differences, @Param("timeFrame") String timeFrame);
 
 
     String time(Long time);

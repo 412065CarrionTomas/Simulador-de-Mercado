@@ -16,7 +16,6 @@ public class Candle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    private String timeFrame;
     private Long time;
     private String timeFrame;
     private double open;

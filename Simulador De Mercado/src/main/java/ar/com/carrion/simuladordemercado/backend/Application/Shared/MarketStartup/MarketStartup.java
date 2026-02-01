@@ -24,6 +24,5 @@ public class MarketStartup implements ApplicationRunner {
         orderService.selectAllOrderBook();
         candleService.selectLastTwoCandles();
         orderBookService.sortOrderBook();
-        orderService.deleteAllOrderBook();
     }
 }

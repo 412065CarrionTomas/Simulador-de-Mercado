@@ -2,7 +2,6 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBook
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
 import java.util.List;
 
 public class OrderBookNotificationService {
