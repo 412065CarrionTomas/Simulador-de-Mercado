@@ -1,7 +1,9 @@
 package ar.com.carrion.simuladordemercado.backend.Configuration;
 
+import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.NewsAlgortihm;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.RandomAlgorithm;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchingEngine;
+import ar.com.carrion.simuladordemercado.backend.Application.Services.AlgorithmService.NewsAlgorithmService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.AlgorithmService.RandomAlgorithmService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookNotificationService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
@@ -25,5 +27,11 @@ public class AlgorithmConfiguration {
             , OrderBookNotificationService notificationService){
         return new RandomAlgorithmService(orderBookService, candle, randomAlgorithm, matchingEngine, notificationService);
     }
+
+    @Bean
+    public NewsAlgortihm newsAlgortihm(){return  new NewsAlgortihm();}
+
+    @Bean
+    public NewsAlgorithmService newsAlgorithmService(){return new NewsAlgorithmService();}
 
 }

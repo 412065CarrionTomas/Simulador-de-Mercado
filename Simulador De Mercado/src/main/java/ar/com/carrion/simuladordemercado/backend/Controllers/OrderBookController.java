@@ -21,14 +21,9 @@ public class OrderBookController {
         this.orderBookService = orderBookService;
     }
 
-    /*
-    * Todavia sin terminar logica. Complicacion con los id autogenerados por spring.
-    * ID suplanta a ID eliminado, genera error.
-    *  */
-
-//    @GetMapping("/inserAllOrdersInOrderBook")
-//    public void insertAllOrdersInBook(){
-//        orderService.insertOrderBook();
-//    }
+    @GetMapping("/inserAllOrdersInOrderBook")
+    public void insertAllOrdersInBook(){
+        orderService.insertOrderBook();
+    }
 
 }

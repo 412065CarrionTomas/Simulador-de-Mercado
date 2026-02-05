@@ -13,7 +13,7 @@ public class ScheduleTimer {
     public ScheduleTimer(CandleService candleService) {
         this.candleService = candleService;
     }
-
+//
 //    @Scheduled(cron = "0 * * * * *")
 //    public void insertCandles() throws InterruptedException {
 //        candleService.insertCandle("M1");

@@ -13,8 +13,11 @@ public class OrderService {
     }
 
     public void insertOrderBook(){
+        orderBook.getAsks().forEach(order -> order.setId(null));
+        orderBook.getBids().forEach(order -> order.setId(null));
+
         orderDataRepository.saveAll(orderBook.getAsks());
-    orderDataRepository.saveAll(orderBook.getBids());
+        orderDataRepository.saveAll(orderBook.getBids());
     }
 
     public void selectAllOrderBook(){
