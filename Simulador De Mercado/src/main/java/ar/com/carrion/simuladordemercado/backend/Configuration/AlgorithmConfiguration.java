@@ -1,13 +1,13 @@
 package ar.com.carrion.simuladordemercado.backend.Configuration;
 
-import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.NewsAlgortihm;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.RandomAlgorithm;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchingEngine;
-import ar.com.carrion.simuladordemercado.backend.Application.Services.AlgorithmService.NewsAlgorithmService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.AlgorithmService.RandomAlgorithmService;
+import ar.com.carrion.simuladordemercado.backend.Application.Services.IndicatorService.DepthOfMarketNotificationService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookNotificationService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,14 +24,12 @@ public class AlgorithmConfiguration {
             , Candle candle
             , RandomAlgorithm randomAlgorithm
             , MatchingEngine matchingEngine
-            , OrderBookNotificationService notificationService){
-        return new RandomAlgorithmService(orderBookService, candle, randomAlgorithm, matchingEngine, notificationService);
+            , ApplicationEventPublisher eventPublisher){
+        return new RandomAlgorithmService(orderBookService
+                , candle
+                , randomAlgorithm
+                , matchingEngine
+                , eventPublisher);
     }
-
-    @Bean
-    public NewsAlgortihm newsAlgortihm(){return  new NewsAlgortihm();}
-
-    @Bean
-    public NewsAlgorithmService newsAlgorithmService(){return new NewsAlgorithmService();}
 
 }

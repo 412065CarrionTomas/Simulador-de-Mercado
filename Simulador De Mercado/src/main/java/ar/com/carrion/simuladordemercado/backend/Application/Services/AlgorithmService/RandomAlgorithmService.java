@@ -1,12 +1,18 @@
 package ar.com.carrion.simuladordemercado.backend.Application.Services.AlgorithmService;
 
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.RandomAlgorithm;
+import ar.com.carrion.simuladordemercado.backend.Application.Logica.Indicator.OrderFlowAnalytics.DepthOfMarketResult;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchResult;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchingEngine;
+import ar.com.carrion.simuladordemercado.backend.Application.Services.IndicatorService.DepthOfMarketNotificationService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookNotificationService;
+import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderBookChangedEvent;
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
+import org.springframework.context.ApplicationEventPublisher;
+
+import java.security.DomainLoadStoreParameter;
 
 public class RandomAlgorithmService {
 
@@ -14,17 +20,17 @@ public class RandomAlgorithmService {
     private final Candle candle;
     private final RandomAlgorithm randomAlgorithm;
     private final MatchingEngine matchingEngine;
-    private final OrderBookNotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public RandomAlgorithmService(OrderBookService orderBookService
             , Candle candle
             , RandomAlgorithm randomAlgorithm
-            , MatchingEngine matchingEngine, OrderBookNotificationService notificationService) {
+            , MatchingEngine matchingEngine, ApplicationEventPublisher eventPublisher) {
         this.orderBookService = orderBookService;
         this.candle = candle;
         this.randomAlgorithm = randomAlgorithm;
         this.matchingEngine = matchingEngine;
-        this.notificationService = notificationService;
+        this.eventPublisher = eventPublisher;
     }
 
     public void randomAlgorithm(){
@@ -43,7 +49,7 @@ public class RandomAlgorithmService {
 
                 candle.setClose(matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
-                notifyOrderBook();
+                eventPublisher.publishEvent(new OrderBookChangedEvent("ORDER_BOOK_UPDATE"));
                 return;
 
             } else {
@@ -55,7 +61,7 @@ public class RandomAlgorithmService {
 
                 candle.setClose(matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
-                notifyOrderBook();
+                eventPublisher.publishEvent(new OrderBookChangedEvent("ORDER_BOOK_UPDATE"));
                 return;
 
             }
@@ -77,14 +83,7 @@ public class RandomAlgorithmService {
                               :orderBookService.getAllAsks()));
 
         modifyCandleExtreme(candle);
-        notifyOrderBook();
-    }
-
-    private void notifyOrderBook() {
-        notificationService.notifyOrderBookUpdate(
-                orderBookService.getAllBids(),
-                orderBookService.getAllAsks()
-        );
+        eventPublisher.publishEvent(new OrderBookChangedEvent("ORDER_BOOK_UPDATE"));
     }
 
     private void modifyCandleExtreme(Candle candle){
