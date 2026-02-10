@@ -6,7 +6,10 @@ import ar.com.carrion.simuladordemercado.backend.Application.Services.IndicatorS
 import ar.com.carrion.simuladordemercado.backend.Application.Services.IndicatorService.DepthOfMarketService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DepthOfMarketEventListener {
     private final DepthOfMarketService depthOfMarketService;
     private final DepthOfMarketNotificationService depthOfMarketNotificationService;
