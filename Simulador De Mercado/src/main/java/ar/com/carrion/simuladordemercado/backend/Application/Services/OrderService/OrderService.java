@@ -2,7 +2,9 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.OrderServ
 
 import ar.com.carrion.simuladordemercado.backend.Domains.OrderBook;
 import ar.com.carrion.simuladordemercado.backend.Infrastructure.IOrderDataRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OrderService {
     private final OrderBook orderBook;
     private final IOrderDataRepository orderDataRepository;

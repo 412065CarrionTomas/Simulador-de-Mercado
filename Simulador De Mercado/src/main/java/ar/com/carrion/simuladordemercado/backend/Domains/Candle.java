@@ -6,11 +6,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 
 @Entity
 @Getter
 @Setter
+@Component
 public class Candle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

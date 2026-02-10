@@ -11,9 +11,11 @@ import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
 
 import java.security.DomainLoadStoreParameter;
 
+@Service
 public class RandomAlgorithmService {
 
     private final OrderBookService orderBookService;

@@ -2,7 +2,9 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.Indicator
 
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Indicator.OrderFlowAnalytics.DepthOfMarketResult;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DepthOfMarketNotificationService {
     private final SimpMessagingTemplate template;
 

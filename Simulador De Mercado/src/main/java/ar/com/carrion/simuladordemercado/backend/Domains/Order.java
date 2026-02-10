@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Component
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

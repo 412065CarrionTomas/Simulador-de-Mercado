@@ -1,8 +1,11 @@
 package ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class MatchingEngine {
 
     public double matchEngineToOrder(double price, Order order, List<Order> oppositeList, List<Order> otherList){

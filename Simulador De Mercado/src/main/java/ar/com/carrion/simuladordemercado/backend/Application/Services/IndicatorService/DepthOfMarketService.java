@@ -3,7 +3,9 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.Indicator
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Indicator.OrderFlowAnalytics.DepthOfMarket;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Indicator.OrderFlowAnalytics.DepthOfMarketResult;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DepthOfMarketService {
     private final DepthOfMarket depthOfMarket;
     private final OrderBookService orderBookService;

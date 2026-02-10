@@ -1,9 +1,11 @@
 package ar.com.carrion.simuladordemercado.backend.Application.Logica.Indicator.OrderFlowAnalytics;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class DepthOfMarket {
 
     public DepthOfMarketResult GetDeptOfMarket(List<Order> listBids, List<Order> listAsks){

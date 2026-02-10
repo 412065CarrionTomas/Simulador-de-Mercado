@@ -2,10 +2,13 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.CandleSer
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Infrastructure.ICandleDataRepository;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
+@Service
 public class CandleService {
 
     private final ICandleDataRepository candleDataRepository;

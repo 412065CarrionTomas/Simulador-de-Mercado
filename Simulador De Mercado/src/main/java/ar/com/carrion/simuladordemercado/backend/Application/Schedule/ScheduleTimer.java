@@ -2,8 +2,9 @@ package ar.com.carrion.simuladordemercado.backend.Application.Schedule;
 
 import ar.com.carrion.simuladordemercado.backend.Application.Services.CandleService.CandleService;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class ScheduleTimer {
 
     private final CandleService candleService;

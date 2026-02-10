@@ -2,9 +2,12 @@ package ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBook
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Domains.OrderBook;
+import org.springframework.stereotype.Service;
+
 import java.util.Comparator;
 import java.util.List;
 
+@Service
 public class OrderBookService {
 
     private final OrderBook orderBook;

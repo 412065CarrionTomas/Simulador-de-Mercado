@@ -1,8 +1,11 @@
 package ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm;
 
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 
+@Component
 public class RandomAlgorithm {
 
     public Order executeRandom(double price) {
