@@ -5,6 +5,10 @@ import ar.com.carrion.simuladordemercado.backend.Application.Logica.Indicator.Or
 import ar.com.carrion.simuladordemercado.backend.Application.Services.IndicatorService.DepthOfMarketNotificationService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.IndicatorService.DepthOfMarketService;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
+<<<<<<<< Updated upstream:Simulador De Mercado/src/main/java/ar/com/carrion/simuladordemercado/backend/Application/Shared/EventDriven/DepthOfMarketEventListener.java
+========
+import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderBookEventDriven.OrderBookEvent.OrderBookUpdateEvent;
+>>>>>>>> Stashed changes:Simulador De Mercado/src/main/java/ar/com/carrion/simuladordemercado/backend/Application/Shared/EventDriven/OrderBookEventDriven/OrderBookListener/DepthOfMarketListener.java
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
