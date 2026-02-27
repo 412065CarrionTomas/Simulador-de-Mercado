@@ -15,4 +15,6 @@ public class MatchResult {
     private Order order;
     private double priceExecution;
     private boolean fullyExecuted;
+    private int quantityFilled;
+    private int remainingQuantity;
 }
