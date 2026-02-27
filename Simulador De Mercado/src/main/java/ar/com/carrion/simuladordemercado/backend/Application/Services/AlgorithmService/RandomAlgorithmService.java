@@ -4,8 +4,6 @@ import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.Ra
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchResult;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchingEngine;
 import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderBookEventDriven.OrderBookEvent.OrderBookUpdateEvent;
-import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderEventDriven.OrderEvent.OrderCreateEvent;
-import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderEventDriven.OrderEvent.OrderUpdateEvent;
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
@@ -40,7 +38,7 @@ public class RandomAlgorithmService {
 
     public void randomAlgorithm(){
         Order order = randomAlgorithm.executeRandom(candle.getClose());
-        publishOrderCreatedEvent(order);
+//        publishOrderCreatedEvent(order);
         boolean hasOrderBuy = true;
         MatchResult matchResult;
 
@@ -55,7 +53,7 @@ public class RandomAlgorithmService {
 
                 candle.setClose(matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
-                eventPublisher.publishEvent(new OrderBookUpdateEvent("ORDER_BOOK_UPDATE"));
+//                eventPublisher.publishEvent(new OrderBookUpdateEvent("ORDER_BOOK_UPDATE"));
                 return;
 
             } else {
@@ -67,7 +65,7 @@ public class RandomAlgorithmService {
 
                 candle.setClose(matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
-                eventPublisher.publishEvent(new OrderBookUpdateEvent("ORDER_BOOK_UPDATE"));
+//                eventPublisher.publishEvent(new OrderBookUpdateEvent("ORDER_BOOK_UPDATE"));
                 return;
 
             }
@@ -89,24 +87,26 @@ public class RandomAlgorithmService {
                               :orderBookService.getAllAsks()));
 
         modifyCandleExtreme(candle);
-        eventPublisher.publishEvent(new OrderBookUpdateEvent("ORDER_BOOK_UPDATE"));
+//        eventPublisher.publishEvent(new OrderBookUpdateEvent("ORDER_BOOK_UPDATE"));
     }
 
     private void publishOrderUpdateEvent(Order order, MatchResult matchResult){
-        eventPublisher.publishEvent(new OrderUpdateEvent(
-                LocalDateTime.now(ZoneOffset.UTC),
-                order,
+        eventPublisher.publishEvent(new OrderBookUpdateEvent(
+//
+//                LocalDateTime.now(ZoneOffset.UTC),
+//                order,
                 matchResult
         ));
     }
 
-    private void publishOrderCreatedEvent(Order order) {
-        eventPublisher.publishEvent(new OrderCreateEvent(
-                "CREATED",
-                LocalDateTime.now(ZoneOffset.UTC),
-                order,
-                0,
-                false
+    private void publishOrderCreatedEvent(Order order, MatchResult matchResult) {
+        eventPublisher.publishEvent(new OrderBookUpdateEvent(
+                matchResult
+//                "CREATED",
+//                LocalDateTime.now(ZoneOffset.UTC),
+//                order,
+//                0,
+//                false
         ));
     }
 
