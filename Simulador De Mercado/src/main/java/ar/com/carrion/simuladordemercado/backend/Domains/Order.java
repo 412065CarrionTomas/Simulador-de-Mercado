@@ -27,4 +27,12 @@ public class Order {
     private int quantity;
     private LocalDateTime time;
 
+    public Order(Order order){
+        this.id = order.id;
+        this.price = order.price;
+        this.typeOrder = order.typeOrder;
+        this.quantity = order.getQuantity();
+        this.time = order.time;
+    }
+
 }

@@ -12,5 +12,4 @@ public class OrderCreateEvent {
     private String typeEvent;
     private LocalDateTime eventTime;
     private Order order;
-
 }

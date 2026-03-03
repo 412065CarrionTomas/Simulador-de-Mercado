@@ -16,5 +16,5 @@ public class MatchResult {
     private double priceExecution;
     private boolean fullyExecuted;
     private int quantityFilled;
-    private int remainingQuantity;
+    private int remainingQuantity; // posible eliminacion
 }

@@ -1,4 +1,4 @@
-package ar.com.carrion.simuladordemercado.backend.Domains.OrderSnapshot;
+package ar.com.carrion.simuladordemercado.backend.Domains;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,13 +11,12 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "order_snapshots")
-@IdClass(OrderSnapshotId.class)
 @Component
 public class OrderSnapshot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Id
+
     private LocalDateTime creationOrderTime; //Tiempo en el que se creo la orden(viene de componente RandomAlgorithm)
 
     // Evento

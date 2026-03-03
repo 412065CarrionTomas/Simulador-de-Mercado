@@ -33,6 +33,7 @@ public class OrderSnapshotService {
         selectPropertisInOrderToOrderSnapshot(orderSnapshot, event.getOrder());
         MatchResult matchResultWhitDefaultValues = new MatchResult();
         selectPropertisInMatchResultToOrderSnapshot(orderSnapshot, matchResultWhitDefaultValues);
+        orderSnapshot.setRemainingQuantity(event.getOrder().getQuantity());
 
         orderSnapshotDataRepository.save(orderSnapshot);
 
