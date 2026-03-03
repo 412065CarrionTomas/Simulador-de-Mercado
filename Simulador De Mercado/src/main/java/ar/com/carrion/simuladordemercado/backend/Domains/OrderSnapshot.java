@@ -1,24 +1,23 @@
-package ar.com.carrion.simuladordemercado.backend.Domains;
+package ar.com.carrion.simuladordemercado.backend.Domains.OrderSnapshot;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "order_snapshots")
+@IdClass(OrderSnapshotId.class)
 @Component
 public class OrderSnapshot {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long sequenceId;
+    @Id
     private LocalDateTime creationOrderTime; //Tiempo en el que se creo la orden(viene de componente RandomAlgorithm)
 
     // Evento
@@ -35,7 +34,11 @@ public class OrderSnapshot {
     // Ejecución (si aplicable)
     private double executionPrice; // Precio real de ejecución
     private Boolean fullyExecuted;     // Flag rápido
-
-
-
 }
+
+/*
+ * Lo ideal seria una PK compuesta entre tiempo de creacion de orden + 1,2,3,4,...,n id. Pero que ese
+ * id siempre comience de nuevo en 1 por cada tiempo de creacion distinto. Sin emabrgo, no se como manejarlo
+ * y no es mi objetivo por ahora. Tener en cuenta para futuro
+ * */
+//    private Long sequenceId;
