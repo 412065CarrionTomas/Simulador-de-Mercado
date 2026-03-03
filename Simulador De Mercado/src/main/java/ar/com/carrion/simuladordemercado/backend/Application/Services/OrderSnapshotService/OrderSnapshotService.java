@@ -44,10 +44,10 @@ public class OrderSnapshotService {
             return "PENDING";
         }
         else if(matchResult.getPriceExecution() != 0 && !matchResult.isFullyExecuted()){
-            return "FILLED";
+            return "PARTIALLY_FILLED";
         }
         else {
-            return "COMPLETE_FILLED";
+            return "FILLED";
         }
     }
 

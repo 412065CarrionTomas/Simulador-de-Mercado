@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.aspectj.weaver.ast.Or;
+
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Getter
 @Setter
@@ -13,6 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MatchResult {
     private Order order;
+    private Map<Order,String> oppositeOrders = new LinkedHashMap<>();
     private double priceExecution;
     private boolean fullyExecuted;
     private int quantityFilled;
