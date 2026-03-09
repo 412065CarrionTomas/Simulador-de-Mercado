@@ -17,7 +17,7 @@ import java.util.*;
 @AllArgsConstructor
 public class MatchResult {
     private Order order;
-    private Map<Order,String> oppositeOrders = new LinkedHashMap<>();
+    private Map<Order,String> orders = new LinkedHashMap<>();
     private double priceExecution;
     private boolean fullyExecuted;
     private int quantityFilled;

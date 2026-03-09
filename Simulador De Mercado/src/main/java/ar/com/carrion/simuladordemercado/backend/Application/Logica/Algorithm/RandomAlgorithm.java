@@ -8,19 +8,20 @@ import java.time.LocalDateTime;
 @Component
 public class RandomAlgorithm {
 
-    public Order executeRandom(double price) {
+    public Order executeRandom(Long newIdOrder, double price) {
         boolean isMaker = Math.random() < 0.5;
         boolean isBuyer = Math.random() < 0.5;
 
         String typeOrder = isBuyer ? "buy" : "sell";
 
         return isMaker
-                ? createMakerOrder(typeOrder, price)
-                : createTakerOrder(typeOrder);
+                ? createMakerOrder(newIdOrder ,typeOrder, price)
+                : createTakerOrder(newIdOrder ,typeOrder);
     }
 
-    private Order createMakerOrder(String typeOrder, double price) {
+    private Order createMakerOrder(Long idOrder,String typeOrder, double price) {
         Order orderMaker = new Order();
+        orderMaker.setId(idOrder);
         orderMaker.setTypeOrder(typeOrder);
         orderMaker.setPrice(randomNewPrice(price));
         orderMaker.setQuantity(randomQuantity());
@@ -28,8 +29,9 @@ public class RandomAlgorithm {
         return orderMaker;
     }
 
-    private Order createTakerOrder(String typeOrder) {
+    private Order createTakerOrder(Long idOrder, String typeOrder) {
         Order orderTaker = new Order();
+        orderTaker.setId(idOrder);
         orderTaker.setTypeOrder(typeOrder);
         orderTaker.setPrice(0.00);
         orderTaker.setQuantity(randomQuantity());

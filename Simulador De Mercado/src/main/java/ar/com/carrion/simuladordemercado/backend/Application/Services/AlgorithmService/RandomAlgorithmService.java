@@ -1,10 +1,12 @@
 package ar.com.carrion.simuladordemercado.backend.Application.Services.AlgorithmService;
 
+import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.IdOrder;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.RandomAlgorithm;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchResult;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchingEngine;
 import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderBookEventDriven.OrderBookEvent.OrderBookUpdateEvent;
 import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderEventDriven.OrderEvent.OrderCreateEvent;
+import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderEventDriven.OrderEvent.OrderUpdateEvent;
 import ar.com.carrion.simuladordemercado.backend.Domains.Candle;
 import ar.com.carrion.simuladordemercado.backend.Domains.Order;
 import ar.com.carrion.simuladordemercado.backend.Application.Services.OrderBookService.OrderBookService;
@@ -21,20 +23,25 @@ public class RandomAlgorithmService {
     private final RandomAlgorithm randomAlgorithm;
     private final MatchingEngine matchingEngine;
     private final ApplicationEventPublisher eventPublisher;
+    private final IdOrder idOrder;
+
 
     public RandomAlgorithmService(OrderBookService orderBookService
             , Candle candle
             , RandomAlgorithm randomAlgorithm
-            , MatchingEngine matchingEngine, ApplicationEventPublisher eventPublisher) {
+            , MatchingEngine matchingEngine
+            , ApplicationEventPublisher eventPublisher
+            , IdOrder idOrder) {
         this.orderBookService = orderBookService;
         this.candle = candle;
         this.randomAlgorithm = randomAlgorithm;
         this.matchingEngine = matchingEngine;
         this.eventPublisher = eventPublisher;
+        this.idOrder = idOrder;
     }
 
     public void randomAlgorithm(){
-        Order order = randomAlgorithm.executeRandom(candle.getClose());
+        Order order = randomAlgorithm.executeRandom(getNewIdOrder(), candle.getClose());
         publishOrderCreatedEvent(order);
         boolean hasOrderBuy = true;
         MatchResult matchResult;
@@ -52,7 +59,7 @@ public class RandomAlgorithmService {
                                 ? candle.getClose()
                                 : matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
-                publishOrderUpdateEvent(order,matchResult);
+                publishOrderUpdateEvent(matchResult);
                 return;
 
             } else {
@@ -66,7 +73,7 @@ public class RandomAlgorithmService {
                         ? candle.getClose()
                         : matchResult.getPriceExecution());
                 modifyCandleExtreme(candle);
-                publishOrderUpdateEvent(order,matchResult);
+                publishOrderUpdateEvent(matchResult);
                 return;
 
             }
@@ -92,15 +99,13 @@ public class RandomAlgorithmService {
                 : matchResult.getPriceExecution());
 
         modifyCandleExtreme(candle);
-//        publishOrderUpdateEvent(order,matchResult); //agregar retorno de matchResult al MatchEngine
     }
 
 
-    private void publishOrderUpdateEvent(Order order, MatchResult matchResult){
-        eventPublisher.publishEvent(new OrderBookUpdateEvent(
-                LocalDateTime.now(ZoneOffset.UTC),
-                order,
-                matchResult
+    private void publishOrderUpdateEvent(MatchResult matchResult){
+        eventPublisher.publishEvent(new OrderUpdateEvent(
+                matchResult,
+                LocalDateTime.now(ZoneOffset.UTC)
         ));
     }
 
@@ -110,6 +115,17 @@ public class RandomAlgorithmService {
                 LocalDateTime.now(ZoneOffset.UTC),
                 order
         ));
+    }
+
+    private Long getNewIdOrder(){
+        Long id = idOrder.getIdOrder();
+        if(id == null){
+            idOrder.setIdOrder(1L);
+            return 1L;
+        }else {
+            idOrder.setIdOrder(id+1);
+            return id+1;
+        }
     }
 
     private void modifyCandleExtreme(Candle candle){

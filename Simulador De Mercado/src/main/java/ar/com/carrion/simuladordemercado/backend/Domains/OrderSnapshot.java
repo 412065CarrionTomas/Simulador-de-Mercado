@@ -33,6 +33,7 @@ public class OrderSnapshot {
     // Ejecución (si aplicable)
     private double executionPrice; // Precio real de ejecución
     private Boolean fullyExecuted;     // Flag rápido
+//    private LocalDateTime creationOrderOppositeTime;
 }
 
 /*

@@ -14,9 +14,11 @@ public class OrderService {
         this.orderDataRepository = orderDataRepository;
     }
 
+    //mover al orderBook
     public void insertOrderBook(){
-        orderBook.getAsks().forEach(order -> order.setId(null));
-        orderBook.getBids().forEach(order -> order.setId(null));
+        //No hace falta, ya que la BD no genera mas sus propios ids.
+//        orderBook.getAsks().forEach(order -> order.setId(null));
+//        orderBook.getBids().forEach(order -> order.setId(null));
 
         orderDataRepository.saveAll(orderBook.getAsks());
         orderDataRepository.saveAll(orderBook.getBids());
@@ -30,4 +32,6 @@ public class OrderService {
     public void deleteAllOrdersInBD(){
         orderDataRepository.deleteAllOrders();
     }
+
+    public Long getMaxIdOrder(){ return orderDataRepository.findMaxId();}
 }

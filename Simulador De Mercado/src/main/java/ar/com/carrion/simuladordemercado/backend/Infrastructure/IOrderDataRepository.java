@@ -21,4 +21,7 @@ public interface IOrderDataRepository extends JpaRepository<Order, Long> {
     @Modifying
     @Query("DELETE FROM Order")
     void deleteAllOrders();
+
+    @Query("SELECT MAX(o.id) FROM Order o")
+    Long findMaxId();
 }
