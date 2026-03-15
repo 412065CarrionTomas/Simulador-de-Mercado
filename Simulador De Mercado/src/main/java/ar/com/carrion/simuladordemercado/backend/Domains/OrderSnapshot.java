@@ -17,6 +17,7 @@ public class OrderSnapshot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long idOrder;
     private LocalDateTime creationOrderTime; //Tiempo en el que se creo la orden(viene de componente RandomAlgorithm)
 
     // Evento
@@ -26,14 +27,14 @@ public class OrderSnapshot {
     // Estado de la orden en ese momento
     private double price;
     private String orderType;
-    private int originalQuantity;
-    private int executedQuantity;      // Cuánto se ejecutó hasta ahora
+    private int quantity;
+    private int filledQuantity;      // Cuánto se ejecutó hasta ahora
     private int remainingQuantity;     // Cuánto falta
 
     // Ejecución (si aplicable)
     private double executionPrice; // Precio real de ejecución
     private Boolean fullyExecuted;     // Flag rápido
-//    private LocalDateTime creationOrderOppositeTime;
+    private Long idOrderOpposite;
 }
 
 /*

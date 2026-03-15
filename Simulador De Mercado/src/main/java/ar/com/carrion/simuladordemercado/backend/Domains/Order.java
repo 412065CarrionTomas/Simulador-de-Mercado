@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @Component
 public class Order {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private double price;

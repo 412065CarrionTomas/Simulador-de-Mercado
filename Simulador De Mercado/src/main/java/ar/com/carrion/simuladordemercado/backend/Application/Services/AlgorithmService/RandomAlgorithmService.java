@@ -4,6 +4,7 @@ import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.Id
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.Algorithm.RandomAlgorithm;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchResult;
 import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.MatchingEngine;
+import ar.com.carrion.simuladordemercado.backend.Application.Logica.MatchingEngine.OrderResult;
 import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderBookEventDriven.OrderBookEvent.OrderBookUpdateEvent;
 import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderEventDriven.OrderEvent.OrderCreateEvent;
 import ar.com.carrion.simuladordemercado.backend.Application.Shared.EventDriven.OrderEventDriven.OrderEvent.OrderUpdateEvent;
@@ -14,6 +15,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 @Service
 public class RandomAlgorithmService {
@@ -49,33 +51,31 @@ public class RandomAlgorithmService {
         if (order.getPrice() == 0.00) {
 
             if ("buy".equals(order.getTypeOrder())) {
-                matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClose(),order,orderBookService.getAllAsks());
-
-                if(matchResult.getOrder() != null && !matchResult.isFullyExecuted() && matchResult.getOrder().getPrice() != 0){
-                    orderBookService.addLimitBuyOrder(matchResult.getOrder());
-                }
-
-                candle.setClose((matchResult.getPriceExecution()) == 0
-                                ? candle.getClose()
-                                : matchResult.getPriceExecution());
-                modifyCandleExtreme(candle);
-                publishOrderUpdateEvent(matchResult);
-                return;
-
-            } else {
                 matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClose(),order,orderBookService.getAllBids());
 
-                if(matchResult.getOrder() != null && !matchResult.isFullyExecuted() && matchResult.getOrder().getPrice() != 0){
-                    orderBookService.addLimitSellOrder(matchResult.getOrder());
+                if(matchResult.getMainOrder() != null && matchResult.getMainOrder().getQuantity() != 0 &&
+                    matchResult.getMainOrder().getPrice() != 0){
+                    orderBookService.addLimitBuyOrder(matchResult.getMainOrder());
                 }
 
-                candle.setClose((matchResult.getPriceExecution()) == 0
-                        ? candle.getClose()
-                        : matchResult.getPriceExecution());
+                double executionPrice = matchResult.getLastTradeExecute();
+                candle.setClose(executionPrice == 0 ? candle.getClose() : executionPrice);
                 modifyCandleExtreme(candle);
                 publishOrderUpdateEvent(matchResult);
                 return;
+            } else {
+                matchResult = matchingEngine.matchEngineToOrderTaker(candle.getClose(),order,orderBookService.getAllAsks());
 
+                if(matchResult.getMainOrder() != null && matchResult.getMainOrder().getQuantity() != 0 &&
+                        matchResult.getMainOrder().getPrice() != 0){
+                    orderBookService.addLimitSellOrder(matchResult.getMainOrder());
+                }
+
+                double executionPrice = matchResult.getLastTradeExecute();
+                candle.setClose(executionPrice == 0 ? candle.getClose() : executionPrice);
+                modifyCandleExtreme(candle);
+                publishOrderUpdateEvent(matchResult);
+                return;
             }
         } else {
 
@@ -87,16 +87,14 @@ public class RandomAlgorithmService {
             }
         }
 
-        matchResult = matchingEngine.matchEngineToOrder(candle.getClose()
-                ,order
+        matchResult = matchingEngine.matchEngineToOrder(order
                 ,hasOrderBuy ? orderBookService.getAllAsks()
                             :orderBookService.getAllBids()
                 ,hasOrderBuy ? orderBookService.getAllBids()
                             :orderBookService.getAllAsks());
 
-        candle.setClose((matchResult.getPriceExecution()) == 0
-                ? candle.getClose()
-                : matchResult.getPriceExecution());
+        double executionPrice = matchResult.getLastTradeExecute();
+        candle.setClose(executionPrice == 0 ? candle.getClose() : executionPrice);
 
         modifyCandleExtreme(candle);
     }
